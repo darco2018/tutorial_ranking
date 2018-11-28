@@ -1,4 +1,4 @@
-package pl.ust.tutorials.tutorial.ranking;
+package pl.ust.tr;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
