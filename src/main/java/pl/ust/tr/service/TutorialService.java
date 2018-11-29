@@ -22,10 +22,10 @@ public class TutorialService {
     }
 
     public Tutorial createTutorial(String title, String link, String description, int price, String duration,
-                                   String keywords, String technologyCode, Type type, Level level) {
-        Technology technology = this.technologyRepository.findOne(technologyCode);
+                                   String keywords, String techologyName, Type type, Level level) {
+        Technology technology = this.technologyRepository.findByName(techologyName);
         if (technology == null) {
-            throw new RuntimeException("technology does not exist: " + technologyCode);
+            throw new RuntimeException("Technology does not exist: " + techologyName);
         }
 
         return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, technology, type, level));

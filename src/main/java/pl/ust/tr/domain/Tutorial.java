@@ -21,7 +21,7 @@ public class Tutorial implements Serializable {
     private String description;
 
     @Column
-    private int price;
+    private Integer price;
 
     @Column
     private String duration;
