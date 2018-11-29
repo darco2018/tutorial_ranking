@@ -29,7 +29,6 @@ public class Tutorial implements Serializable {
     @Column
     private String keywords;
 
-    @Column
     @ManyToOne
     private Technology technology;
 
