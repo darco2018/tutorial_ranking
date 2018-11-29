@@ -27,7 +27,7 @@ public class TechnologyService {
         return technologyRepository.findAll();
     }
 
-    public long count(){
+    public long total(){
         return technologyRepository.count();
     }
 }

@@ -39,7 +39,7 @@ public class Tutorial implements Serializable {
     private Level level;
 
 
-    public Tutorial(Integer id, String title, String link, String description, int price, String duration, String keywords, Technology technology, Type type, Level level) {
+    public Tutorial(String title, String link, String description, int price, String duration, String keywords, Technology technology, Type type, Level level) {
         this.id = id;
         this.title = title;
         this.link = link;
