@@ -20,6 +20,9 @@ public class TutorialRatingPk implements Serializable {
         this.userId = userId;
     }
 
+    protected TutorialRatingPk(){}
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
