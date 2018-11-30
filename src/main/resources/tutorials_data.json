@@ -1,6 +1,6 @@
 [
   {
-    "technologyName": "General",
+    "skillName": "General",
     "title": "How to think like a programmer — lessons in problem solving",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -11,7 +11,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "General",
+    "skillName": "General",
     "title": "Title2",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -22,7 +22,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "General",
+    "skillName": "General",
     "title": "Title3",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -33,7 +33,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "General",
+    "skillName": "General",
     "title": "Title4",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -44,7 +44,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Docker",
+    "skillName": "Docker",
     "title": "Title5",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -55,7 +55,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Docker",
+    "skillName": "Docker",
     "title": "Title6",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -66,7 +66,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Docker",
+    "skillName": "Docker",
     "title": "Title7",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -77,7 +77,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Sql",
+    "skillName": "Sql",
     "title": "Title8",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -88,7 +88,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Sql",
+    "skillName": "Sql",
     "title": "Title9",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -99,7 +99,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Jenkins",
+    "skillName": "Jenkins",
     "title": "Title10",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -110,7 +110,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Bash",
+    "skillName": "Bash",
     "title": "Title11",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -121,7 +121,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Bash",
+    "skillName": "Bash",
     "title": "Title12",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -132,7 +132,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Bash",
+    "skillName": "Bash",
     "title": "How to think like a programmer — lessons in problem solving",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -143,7 +143,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Gradle",
+    "skillName": "Gradle",
     "title": "Title13",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -154,7 +154,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Gradle",
+    "skillName": "Gradle",
     "title": "Title14",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -165,7 +165,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Gradle",
+    "skillName": "Gradle",
     "title": "Title15",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -176,7 +176,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Gradle",
+    "skillName": "Gradle",
     "title": "Title16",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -187,7 +187,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title17",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -198,7 +198,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title18",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -209,7 +209,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title19",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -220,7 +220,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title20",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",    "description": "Taking a cue from the Nature Conservancy, we’ve selected 15 state parks and preserves that are shining examples of conservation in action. Just one example is the Guadalupe-Nipomo Dunes Preserve, 18 miles of Earth's most biodiversity coastal dune-lagoon ecosystem. Activities include camping, hiking, horseback riding, boating and bird watching. The tour package includes 2 nights of camping and 3 days admission to the park of your choice. We can also arrange for RV rentals. This is a great package for families who want to pass down a great experience and an education to the next generation, while participating in preserving a part of their future.",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -231,7 +231,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title21",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -242,7 +242,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Intellij",
+    "skillName": "Intellij",
     "title": "Title22",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -253,7 +253,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Spring Boot",
+    "skillName": "Spring Boot",
     "title": "Title23",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -264,7 +264,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Spring Boot",
+    "skillName": "Spring Boot",
     "title": "Title24",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -275,7 +275,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Spring Boot",
+    "skillName": "Spring Boot",
     "title": "Title25",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -286,7 +286,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Spring Boot",
+    "skillName": "Spring Boot",
     "title": "Title26",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",
@@ -297,7 +297,7 @@
     "type": "Article"
   },
   {
-    "technologyName": "Spring Boot",
+    "skillName": "Spring Boot",
     "title": "Title27",
     "link": "https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2",
     "description": " You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?",

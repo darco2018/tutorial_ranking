@@ -3,32 +3,32 @@ package pl.ust.tr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.ust.tr.domain.Level;
-import pl.ust.tr.domain.Technology;
+import pl.ust.tr.domain.Skill;
 import pl.ust.tr.domain.Tutorial;
 import pl.ust.tr.domain.Type;
-import pl.ust.tr.repository.TechnologyRepository;
+import pl.ust.tr.repository.SkillRepository;
 import pl.ust.tr.repository.TutorialRepository;
 
 @Service
 public class TutorialService {
 
     private TutorialRepository tutorialRepository;
-    private TechnologyRepository technologyRepository;
+    private SkillRepository skillRepository;
 
     @Autowired
-    public TutorialService(TutorialRepository tutorialRepository, TechnologyRepository technologyRepository) {
+    public TutorialService(TutorialRepository tutorialRepository, SkillRepository skillRepository) {
         this.tutorialRepository = tutorialRepository;
-        this.technologyRepository = technologyRepository;
+        this.skillRepository = skillRepository;
     }
 
     public Tutorial createTutorial(String title, String link, String description, int price, String duration,
                                    String keywords, String techologyName, Type type, Level level) {
-        Technology technology = this.technologyRepository.findByName(techologyName);
-        if (technology == null) {
-            throw new RuntimeException("Technology does not exist: " + techologyName);
+        Skill skill = this.skillRepository.findByName(techologyName);
+        if (skill == null) {
+            throw new RuntimeException("Skill does not exist: " + techologyName);
         }
 
-        return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, technology, type, level));
+        return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, skill, type, level));
 
     }
 

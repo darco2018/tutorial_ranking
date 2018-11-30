@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Technology implements Serializable {
+public class Skill implements Serializable {
 
     @Id
     private String code;
@@ -15,12 +15,12 @@ public class Technology implements Serializable {
     @Column
     private String name;
 
-    public Technology(String code, String name) {
+    public Skill(String code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    protected Technology() {
+    protected Skill() {
     }
 
     public String getCode() {
@@ -35,7 +35,7 @@ public class Technology implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Technology that = (Technology) o;
+        Skill that = (Skill) o;
         return code.equals(that.code) &&
                 name.equals(that.name);
     }
@@ -47,7 +47,7 @@ public class Technology implements Serializable {
 
     @Override
     public String toString() {
-        return "Technology{" +
+        return "Skill{" +
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 '}';

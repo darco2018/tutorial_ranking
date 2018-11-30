@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.ust.tr.domain.Level;
 import pl.ust.tr.domain.Type;
-import pl.ust.tr.service.TechnologyService;
+import pl.ust.tr.service.SkillService;
 import pl.ust.tr.service.TutorialService;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class TutorialRankingApplication implements CommandLineRunner {
 	@Autowired
 	private TutorialService tutorialService;
 	@Autowired
-	private TechnologyService technologyService;
+	private SkillService skillService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(TutorialRankingApplication.class, args);
@@ -33,7 +33,7 @@ public class TutorialRankingApplication implements CommandLineRunner {
 	public void run(String... strings) throws Exception {
 
 		createDefaultTechnologies();
-		this.technologyService.lookup().forEach(technology -> System.out.println(technology));
+		this.skillService.lookup().forEach(skill -> System.out.println(skill));
 
 		persistTutorials();
 		System.out.println("Number of created tutorials =" + tutorialService.total());
@@ -48,7 +48,7 @@ public class TutorialRankingApplication implements CommandLineRunner {
 				Integer.parseInt(t.price),
 				t.duration,
 				t.keywords,
-				t.technologyName,
+				t.skillName,
 				Type.findByLabel(t.type),
 				Level.valueOf(t.level)
 		));
@@ -57,19 +57,19 @@ public class TutorialRankingApplication implements CommandLineRunner {
 	}
 
 	private void createDefaultTechnologies(){
-		this.technologyService.createTechnology("DO", "Docker");
-		this.technologyService.createTechnology("SQ", "Sql");
-		this.technologyService.createTechnology("JE", "Jenkins");
-		this.technologyService.createTechnology("GR", "Gradle");
-		this.technologyService.createTechnology("BA", "Bash");
-		this.technologyService.createTechnology("IJ", "Intellij");
-		this.technologyService.createTechnology("GE", "General");
-		this.technologyService.createTechnology("SB", "Spring Boot");
+		this.skillService.createSkill("DO", "Docker");
+		this.skillService.createSkill("SQ", "Sql");
+		this.skillService.createSkill("JE", "Jenkins");
+		this.skillService.createSkill("GR", "Gradle");
+		this.skillService.createSkill("BA", "Bash");
+		this.skillService.createSkill("IJ", "Intellij");
+		this.skillService.createSkill("GE", "General");
+		this.skillService.createSkill("SB", "Spring Boot");
 	}
 
 	static class TutorialFromFile{
 
-		private String technologyName, title, link, description, price, duration, keywords, level, type;
+		private String skillName, title, link, description, price, duration, keywords, level, type;
 
 		static List<TutorialFromFile> createTutorialsFromFile() throws IOException {
 			return new ObjectMapper()

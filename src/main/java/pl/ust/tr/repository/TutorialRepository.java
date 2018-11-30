@@ -14,8 +14,8 @@ import java.util.List;
 
 public interface TutorialRepository extends PagingAndSortingRepository<Tutorial, Integer> {
 
-    //List<Tutorial> findByTechnologyCode(@Param("code") String code);
-    Page<Tutorial> findByTechnologyCode(@Param("code") String code, Pageable pageable);
+    //List<Tutorial> findBySkillCode(@Param("code") String code);
+    Page<Tutorial> findBySkillCode(@Param("code") String code, Pageable pageable);
 
     @Override
     @RestResource(exported=false)
@@ -40,4 +40,5 @@ public interface TutorialRepository extends PagingAndSortingRepository<Tutorial,
     @Override
     @RestResource(exported=false)
     void deleteAll();
+
 }

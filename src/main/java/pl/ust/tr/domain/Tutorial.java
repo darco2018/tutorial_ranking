@@ -30,7 +30,7 @@ public class Tutorial implements Serializable {
     private String keywords;
 
     @ManyToOne
-    private Technology technology;
+    private Skill skill;
 
     @Column
     private Type type;
@@ -39,7 +39,7 @@ public class Tutorial implements Serializable {
     private Level level;
 
 
-    public Tutorial(String title, String link, String description, int price, String duration, String keywords, Technology technology, Type type, Level level) {
+    public Tutorial(String title, String link, String description, int price, String duration, String keywords, Skill skill, Type type, Level level) {
         this.id = id;
         this.title = title;
         this.link = link;
@@ -47,7 +47,7 @@ public class Tutorial implements Serializable {
         this.price = price;
         this.duration = duration;
         this.keywords = keywords;
-        this.technology = technology;
+        this.skill = skill;
         this.type = type;
         this.level = level;
     }
@@ -84,8 +84,8 @@ public class Tutorial implements Serializable {
         return keywords;
     }
 
-    public Technology getTechnology() {
-        return technology;
+    public Skill getSkill() {
+        return skill;
     }
 
     public Type getType() {
@@ -124,8 +124,8 @@ public class Tutorial implements Serializable {
         this.keywords = keywords;
     }
 
-    public void setTechnology(Technology technology) {
-        this.technology = technology;
+    public void setSkill(Skill skill) {
+        this.skill = skill;
     }
 
     public void setType(Type type) {
@@ -148,14 +148,14 @@ public class Tutorial implements Serializable {
                 Objects.equals(description, tutorial.description) &&
                 Objects.equals(duration, tutorial.duration) &&
                 Objects.equals(keywords, tutorial.keywords) &&
-                Objects.equals(technology, tutorial.technology) &&
+                Objects.equals(skill, tutorial.skill) &&
                 type == tutorial.type &&
                 level == tutorial.level;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, link, description, price, duration, keywords, technology, type, level);
+        return Objects.hash(id, title, link, description, price, duration, keywords, skill, type, level);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class Tutorial implements Serializable {
                 ", price=" + price +
                 ", duration='" + duration + '\'' +
                 ", keywords='" + keywords + '\'' +
-                ", technology=" + technology +
+                ", skill=" + skill +
                 ", type=" + type +
                 ", level=" + level +
                 '}';
