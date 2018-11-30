@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @SpringBootApplication
-public class TutorialRankingApplication implements CommandLineRunner {
+public class TutorialRatingApplication implements CommandLineRunner {
 
 	@Autowired
 	private TutorialService tutorialService;
@@ -26,7 +26,7 @@ public class TutorialRankingApplication implements CommandLineRunner {
 	private SkillService skillService;
 
 	public static void main(String[] args) {
-		SpringApplication.run(TutorialRankingApplication.class, args);
+		SpringApplication.run(TutorialRatingApplication.class, args);
 	}
 
 	@Override
