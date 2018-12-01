@@ -10,10 +10,14 @@ import pl.ust.tr.domain.TutorialRatingPk;
 import pl.ust.tr.repository.TutorialRatingRepository;
 import pl.ust.tr.repository.TutorialRepository;
 
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/tutorial/{tutorialId}/ratings")
+@RequestMapping(path = "/tutorials/{tutorialId}/ratings")
 public class TutorialRatingController {
 
     private TutorialRatingRepository tutorialRatingRepository;
@@ -27,10 +31,6 @@ public class TutorialRatingController {
 
     protected TutorialRatingController(){}
 
-    private RatingDto toDto(TutorialRating tutorialRating){
-        return new RatingDto(tutorialRating.getScore(), tutorialRating.getComment(), tutorialRating.getPk().getUserId());
-    }
-
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,15 +43,58 @@ public class TutorialRatingController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public List<RatingDto> getAllRatingsForTutorial(@PathVariable(value = "tutorialId") int tutorialId){
 
+        return getRatings(tutorialId)
+                .stream()
+                .map(rating -> toDto(rating))
+                .collect(Collectors.toList());
+    }
+
+
+
+    /*@RequestMapping(method = RequestMethod.GET, path = "/average")
+    public String getTutorialAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
+
+        List<TutorialRating> ratings = getRatings(tutorialId);
+
+        double sum = 0.0;
+        //ratings.forEach(rating -> sum += rating.getScore());
+        for (TutorialRating rating : ratings) {
+            sum += rating.getScore();
+        }
+        return "average: " +  sum / (double)ratings.size();
+    }*/
+
+    @RequestMapping(method = RequestMethod.GET, path = "/average")
+    public AbstractMap.SimpleEntry<String, Double> getAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
+        List<TutorialRating> ratings = getRatings(tutorialId);
+        OptionalDouble average = ratings
+                .stream()
+                .mapToDouble(TutorialRating::getScore)
+                .average();
+        return new AbstractMap.SimpleEntry<>("average", average.isPresent() ? average.getAsDouble() : null);
+    }
 
     ////////////////////////////////// HELPERS ////////////////////////////////
+    private List<TutorialRating> getRatings(int tutorialId){
+        verifyTutorial(tutorialId);
+        return tutorialRatingRepository.findByPkTutorialId(tutorialId);
+    }
+
+
+
     private Tutorial verifyTutorial(int tutorialId) throws NoSuchElementException {
         Tutorial tutorial = tutorialRepository.findOne(tutorialId);
         if(tutorial == null)
             throw new NoSuchElementException("No such tutorial in the database: " + tutorialId);
 
         return tutorial;
+    }
+
+    private RatingDto toDto(TutorialRating tutorialRating){
+        return new RatingDto(tutorialRating.getScore(), tutorialRating.getComment(), tutorialRating.getPk().getUserId());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
