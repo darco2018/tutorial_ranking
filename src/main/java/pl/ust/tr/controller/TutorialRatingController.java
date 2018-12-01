@@ -104,7 +104,12 @@ public class TutorialRatingController {
         return toDto(tutorialRatingRepository.save(tutorialRating));
     }
 
-    
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{userId}")
+    public void delete(@PathVariable (value = "tutorialId") int tutorialId,
+                       @PathVariable (value = "userId") int userId){
+        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, userId);
+        tutorialRatingRepository.delete(tutorialRating);
+    }
 
     ////////////////////////////////// HELPERS ////////////////////////////////
     private List<TutorialRating> getRatings(int tutorialId){
