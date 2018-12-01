@@ -77,10 +77,47 @@ public class TutorialRatingController {
         return new AbstractMap.SimpleEntry<>("average", average.isPresent() ? average.getAsDouble() : null);
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    public RatingDto updateWithPut(@PathVariable (value = "tutorialId") int tutorialId,
+                                   @RequestBody @Validated RatingDto ratingDto){
+
+        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, ratingDto.getUserId());
+        tutorialRating.setScore(ratingDto.getScore());
+        tutorialRating.setComment(ratingDto.getComment());
+        return toDto(tutorialRatingRepository.save(tutorialRating));
+
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH)
+    public RatingDto updateWithPatch(@PathVariable (value = "tutorialId") int tutorialId,
+                                   @RequestBody @Validated RatingDto ratingDto){
+
+        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, ratingDto.getUserId());
+        if(ratingDto.getScore() != null){
+            tutorialRating.setScore(ratingDto.getScore());
+        }
+
+        if(ratingDto.getComment() != null){
+            tutorialRating.setComment(ratingDto.getComment());
+        }
+
+        return toDto(tutorialRatingRepository.save(tutorialRating));
+    }
+
+    
+
     ////////////////////////////////// HELPERS ////////////////////////////////
     private List<TutorialRating> getRatings(int tutorialId){
         verifyTutorial(tutorialId);
         return tutorialRatingRepository.findByPkTutorialId(tutorialId);
+    }
+
+    private TutorialRating verifyTutorialRating(int tutorialId, int userId) throws NoSuchElementException {
+        TutorialRating tutorialRating = tutorialRatingRepository.findByPkTutorialIdAndPkUserId(tutorialId, userId);
+        if(tutorialRating == null)
+            throw new NoSuchElementException("There's no rating for tutorial " + tutorialId + " userId: " + userId);
+
+        return tutorialRating;
     }
 
 
