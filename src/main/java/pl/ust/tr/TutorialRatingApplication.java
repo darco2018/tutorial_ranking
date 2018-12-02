@@ -32,7 +32,7 @@ public class TutorialRatingApplication implements CommandLineRunner {
 	@Override
 	public void run(String... strings) throws Exception {
 
-		createDefaultTechnologies();
+		createDefaultSkills();
 		this.skillService.lookup().forEach(skill -> System.out.println(skill));
 
 		persistTutorials();
@@ -56,7 +56,7 @@ public class TutorialRatingApplication implements CommandLineRunner {
 
 	}
 
-	private void createDefaultTechnologies(){
+	private void createDefaultSkills(){
 		this.skillService.createSkill("DO", "Docker");
 		this.skillService.createSkill("SQ", "Sql");
 		this.skillService.createSkill("JE", "Jenkins");

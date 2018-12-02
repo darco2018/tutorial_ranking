@@ -23,13 +23,10 @@ public class TutorialService {
 
     public Tutorial createTutorial(String title, String link, String description, int price, String duration,
                                    String keywords, String techologyName, Type type, Level level) {
-        Skill skill = this.skillRepository.findByName(techologyName);
-        if (skill == null) {
-            throw new RuntimeException("Skill does not exist: " + techologyName);
-        }
+        Skill skill = this.skillRepository.findByName(techologyName).orElseThrow( () ->
+            new RuntimeException("Skill does not exist: " + techologyName));
 
         return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, skill, type, level));
-
     }
 
     public Iterable<Tutorial> lookup(){

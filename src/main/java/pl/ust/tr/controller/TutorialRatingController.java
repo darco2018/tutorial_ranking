@@ -13,10 +13,7 @@ import pl.ust.tr.domain.TutorialRatingPk;
 import pl.ust.tr.repository.TutorialRatingRepository;
 import pl.ust.tr.repository.TutorialRepository;
 
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.OptionalDouble;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -148,11 +145,14 @@ public class TutorialRatingController {
 
 
     private Tutorial verifyTutorial(int tutorialId) throws NoSuchElementException {
-        Tutorial tutorial = tutorialRepository.findOne(tutorialId);
+       /* Optional<Tutorial> tutorial = tutorialRepository.findById(tutorialId);
         if(tutorial == null)
             throw new NoSuchElementException("No such tutorial in the database: " + tutorialId);
+        return tutorial;*/
 
-        return tutorial;
+        return tutorialRepository.findById(tutorialId).orElseThrow(() ->
+            new NoSuchElementException("No such tutorial in the database: " + tutorialId));
+
     }
 
     private RatingDto toDto(TutorialRating tutorialRating){

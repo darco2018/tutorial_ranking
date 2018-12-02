@@ -16,7 +16,7 @@ public class SkillService {
     }
 
     public Skill createSkill(String code, String name){
-        if(!skillRepository.exists(code)){
+        if(!skillRepository.existsById(code)){
             skillRepository.save(new Skill(code, name));
         }
 

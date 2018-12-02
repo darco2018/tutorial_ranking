@@ -23,11 +23,11 @@ public interface TutorialRepository extends PagingAndSortingRepository<Tutorial,
 
     @Override
     @RestResource(exported=false)
-    <S extends Tutorial> Iterable<S> save(Iterable<S> iterable);
+    <S extends Tutorial> Iterable<S> saveAll(Iterable<S> iterable);
 
     @Override
     @RestResource(exported=false)
-    void delete(Integer integer);
+    void deleteById(Integer integer);
 
     @Override
     @RestResource(exported=false)
@@ -35,7 +35,7 @@ public interface TutorialRepository extends PagingAndSortingRepository<Tutorial,
 
     @Override
     @RestResource(exported=false)
-    void delete(Iterable<? extends Tutorial> iterable);
+    void deleteAll(Iterable<? extends Tutorial> iterable);
 
     @Override
     @RestResource(exported=false)
