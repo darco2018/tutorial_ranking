@@ -1,6 +1,9 @@
 package pl.ust.tr.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,14 +46,31 @@ public class TutorialRatingController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+   /*  otherwise ambiguus mapping
+   @RequestMapping(method = RequestMethod.GET)
     public List<RatingDto> getAllRatingsForTutorial(@PathVariable(value = "tutorialId") int tutorialId){
 
         return getRatings(tutorialId)
                 .stream()
                 .map(rating -> toDto(rating))
                 .collect(Collectors.toList());
+    }*/
+
+    @RequestMapping(method = RequestMethod.GET)
+    public Page<RatingDto> getAllRatingsForTutorialPageable(@PathVariable(value = "tutorialId") int tutorialId,
+                                                            Pageable pageable){
+
+        verifyTutorial(tutorialId);
+        Page<TutorialRating> page = tutorialRatingRepository.findByPkTutorialId(tutorialId, pageable);
+        List<RatingDto> ratingDtoList = page.getContent()
+                                              .stream()
+                                              .map(tutorialRating -> toDto(tutorialRating))
+                                              .collect(Collectors.toList());
+
+        return new PageImpl<RatingDto>(ratingDtoList, pageable, page.getTotalPages());
     }
+
+
 
 
 
