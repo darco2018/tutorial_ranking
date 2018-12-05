@@ -1,0 +1,335 @@
+{
+  "info": {
+    "_postman_id": "e8c718c5-f1b2-46c1-a022-330309c65da2",
+    "name": "TutorialsApp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET requests",
+      "item": [
+        {
+          "name": "GET tutorials",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET skills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/skills",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "skills"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET  one skill",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/skills/GE",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "skills",
+                "GE"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET one tutorial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ratings for tutorial 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/1/ratings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "1",
+                "ratings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET average rating for tutorial 1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/1/ratings/average",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "1",
+                "ratings",
+                "average"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "POST requests",
+      "item": [
+        {
+          "name": "POST tutorial 24",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Postmane added tutorial\",\n    \"link\": \"https://medium.freecodecamp.org/how-to-think-like-a-programmer-lessons-in-problem-solving-d1d8bf1de7d2\",\n    \"description\": \"You probably also wondered what does it mean, exactly, to think like a programmer? And how do you do it?\",\n    \"price\": 0,\n    \"duration\": \"20\",\n    \"keywords\": \"Programming, logical, algorithm\",\n    \"medium\": \"COURSE\",\n    \"level\": \"Beginner\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST skill AW",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"AWS\",\n    \"code\": \"AW\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/skills",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "skills"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST rating for tutorial 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n            \"score\": 1,\n            \"comment\": \"It was a massacre\",\n            \"userId\": 2\n}        "
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/1/ratings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "1",
+                "ratings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DELETE requests",
+      "item": [
+        {
+          "name": "DELETE tutorial 24",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/24",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "24"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE skill AW",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/skills/AW",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "skills",
+                "AW"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE rating for tutorial 1 user 4",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/tutorials/1/ratings/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "tutorials",
+                "1",
+                "ratings",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

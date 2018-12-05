@@ -5,28 +5,30 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Tutorial")
 public class Tutorial implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "smallint(2) unsigned")
     private Integer id;
 
-    @Column
+    @Column(length=100, nullable=false)
     private String title;
 
-    @Column
+    @Column(length=255, nullable=false)
     private String link;
 
     @Column(length = 2000)
     private String description;
 
-    @Column
+    @Column(columnDefinition = "decimal(4, 0) unsigned", precision=4, scale=0, nullable=false)
     private Integer price;
 
-    @Column
+    @Column(length=50)
     private String duration;
 
-    @Column
+    @Column(length=50)
     private String keywords;
 
     @ManyToOne
@@ -34,13 +36,13 @@ public class Tutorial implements Serializable {
     private Skill skill;
 
     @Column
-    private Type type;
+    private Medium medium;
 
-    @Column
+    @Column(length=20, nullable=false)
+    @Enumerated(EnumType.STRING)
     private Level level;
 
-
-    public Tutorial(String title, String link, String description, int price, String duration, String keywords, Skill skill, Type type, Level level) {
+    public Tutorial(String title, String link, String description, int price, String duration, String keywords, Skill skill, Medium medium, Level level) {
         this.id = id;
         this.title = title;
         this.link = link;
@@ -49,7 +51,7 @@ public class Tutorial implements Serializable {
         this.duration = duration;
         this.keywords = keywords;
         this.skill = skill;
-        this.type = type;
+        this.medium = medium;
         this.level = level;
     }
 
@@ -121,12 +123,12 @@ public class Tutorial implements Serializable {
         this.skill = skill;
     }
 
-    public Type getType() {
-        return type;
+    public Medium getMedium() {
+        return medium;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setMedium(Medium medium) {
+        this.medium = medium;
     }
 
     public Level getLevel() {
@@ -150,13 +152,13 @@ public class Tutorial implements Serializable {
                 Objects.equals(duration, tutorial.duration) &&
                 Objects.equals(keywords, tutorial.keywords) &&
                 Objects.equals(skill, tutorial.skill) &&
-                type == tutorial.type &&
+                medium == tutorial.medium &&
                 level == tutorial.level;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, link, description, price, duration, keywords, skill, type, level);
+        return Objects.hash(id, title, link, description, price, duration, keywords, skill, medium, level);
     }
 
     @Override
@@ -170,7 +172,7 @@ public class Tutorial implements Serializable {
                 ", duration='" + duration + '\'' +
                 ", keywords='" + keywords + '\'' +
                 ", skill=" + skill +
-                ", type=" + type +
+                ", medium=" + medium +
                 ", level=" + level +
                 '}';
     }

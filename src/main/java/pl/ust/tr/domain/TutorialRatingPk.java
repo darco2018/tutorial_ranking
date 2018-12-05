@@ -2,6 +2,7 @@ package pl.ust.tr.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,9 +11,10 @@ import java.util.Objects;
 public class TutorialRatingPk implements Serializable {
 
     @ManyToOne
+    @JoinColumn(name="tutorial_id")
     private Tutorial tutorial;
 
-    @Column(insertable = false, updatable = false, nullable = false)
+    @Column(name="user_id", insertable = false, updatable = false, nullable = false)
     private Integer userId;
 
     public TutorialRatingPk(Tutorial tutorial, Integer userId) {

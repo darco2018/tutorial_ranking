@@ -3,18 +3,22 @@ package pl.ust.tr.domain;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class TutorialRating {
+@Table(name = "TutorialRating")
+public class TutorialRating implements Serializable {
 
+    // will result in tutorial_id integer not null; user_id integer not null, primary key (tutorial_id, user_id)
     @EmbeddedId
     private TutorialRatingPk pk;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "smallint(2) unsigned", nullable = false, precision=2, scale=0)
     private Integer score;
 
-    @Column
+    @Column(length=255)
     private String comment;
 
     public TutorialRating(TutorialRatingPk pk, Integer score, String comment) {

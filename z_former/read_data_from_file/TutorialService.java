@@ -3,9 +3,9 @@ package pl.ust.tr.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.ust.tr.domain.Level;
+import pl.ust.tr.domain.Medium;
 import pl.ust.tr.domain.Skill;
 import pl.ust.tr.domain.Tutorial;
-import pl.ust.tr.domain.Type;
 import pl.ust.tr.repository.SkillRepository;
 import pl.ust.tr.repository.TutorialRepository;
 
@@ -22,11 +22,11 @@ public class TutorialService {
     }
 
     public Tutorial createTutorial(String title, String link, String description, int price, String duration,
-                                   String keywords, String techologyName, Type type, Level level) {
+                                   String keywords, String techologyName, Medium medium, Level level) {
         Skill skill = this.skillRepository.findByName(techologyName).orElseThrow( () ->
             new RuntimeException("Skill does not exist: " + techologyName));
 
-        return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, skill, type, level));
+        return tutorialRepository.save( new Tutorial ( title,  link,  description,  price,  duration, keywords, skill, medium, level));
     }
 
     public Iterable<Tutorial> lookup(){

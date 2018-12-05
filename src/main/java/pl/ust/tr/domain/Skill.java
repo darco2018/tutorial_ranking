@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Skill")
 public class Skill implements Serializable {
 
     @Id
+    @Column(name="skill_code", columnDefinition = "char(2)")
     private String code;
 
-    @Column
+    @Column(nullable=false, length=50)
     private String name;
 
     @OneToMany(mappedBy="skill", fetch= FetchType.EAGER, cascade = CascadeType.ALL)
