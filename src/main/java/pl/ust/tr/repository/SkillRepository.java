@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface SkillRepository extends CrudRepository<Skill, String> {
 
     Optional<Skill> findByName(@Param("name") String name);
+
 }

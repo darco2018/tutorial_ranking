@@ -30,6 +30,7 @@ public class Tutorial implements Serializable {
     private String keywords;
 
     @ManyToOne
+    @JoinColumn(name = "skill_code")
     private Skill skill;
 
     @Column
@@ -52,7 +53,7 @@ public class Tutorial implements Serializable {
         this.level = level;
     }
 
-    protected Tutorial(){
+    protected Tutorial() {
 
     }
 
@@ -60,76 +61,76 @@ public class Tutorial implements Serializable {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public Skill getSkill() {
-        return skill;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getLink() {
+        return link;
+    }
+
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDuration() {
+        return duration;
     }
 
     public void setDuration(String duration) {
         this.duration = duration;
     }
 
+    public String getKeywords() {
+        return keywords;
+    }
+
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public Skill getSkill() {
+        return skill;
     }
 
     public void setSkill(Skill skill) {
         this.skill = skill;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     public void setLevel(Level level) {

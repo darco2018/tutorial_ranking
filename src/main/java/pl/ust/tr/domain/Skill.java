@@ -1,9 +1,9 @@
 package pl.ust.tr.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +14,9 @@ public class Skill implements Serializable {
 
     @Column
     private String name;
+
+    @OneToMany(mappedBy="skill", fetch= FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Tutorial> tutorials = new ArrayList<>();
 
     public Skill(String code, String name) {
         this.code = code;
