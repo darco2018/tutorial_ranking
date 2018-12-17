@@ -15,3 +15,4 @@ dbpass="tut_pass"
 dbuser="tut_user"
 
 migration_dirs="/home/ustrd/migration/tutorial:/var/migration"
+logging_dirs="/home/ustrd/logs/tutorial:/var/log/tutorial-app"

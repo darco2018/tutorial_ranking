@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scan-true reloads config files when they're modified; otherwise every minute-->
+<!-- debug=true to view the config files-->
+<configuration scan="true" debug="true">
+    <!--by default all statments are logged to the console at DEBUG-->
+    <!--creates console and file appender each with their own layout-->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="pl.ust.tr" level="DEBUG"></logger>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/var/log/tutorial-app/application.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-7d{MM-dd HH:mm:ss:SSS} %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--SQL statements and parameters-->
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.type.descriptor.sql level=TRACE"></logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!--more or less equivalent of default config
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+       <encoder>
+           <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+       </encoder>
+   </appender>
+   <root level="DEBUG">
+       <appender-ref ref="STDOUT" />
+   </root>
+    -->
+
+  <!--
+      <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+              <fileNamePattern>log-%d{yyyy-MM-dd}.log</fileNamePattern>
+              &lt;!&ndash;keep logs for at most 30 days up to max size of 3GB&ndash;&gt;
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            &lt;!&ndash;roll over when file reaches 6MB&ndash;&gt;
+            <maxFileSize>6MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>[%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+      -->
+
+</configuration>

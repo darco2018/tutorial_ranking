@@ -6,6 +6,7 @@ echo "&&&&&&&&&&&&&&&&&& Building the app container & linking to the database co
 echo "docker run \
      --name ${app_container_name} \
      -p 8080:8080 \
+     -v ${logging_dirs} \
      -v ${migration_dirs} \
      -e dbserver=${dbserver}  \
      -e dbport=${dbport} \
@@ -18,6 +19,7 @@ echo "docker run \
      docker run \
      --name ${app_container_name} \
      -p 8080:8080 \
+     -v ${logging_dirs} \
      -v ${migration_dirs} \
      -e dbserver=${dbserver}  \
      -e dbport=${dbport} \
