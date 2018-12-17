@@ -1,4 +1,4 @@
-FROM ustrd/oracle-jdk-phusion:8
+FROM openjdk:8-jre-alpine
 VOLUME /tmp
 ENV JAR_NAME  tutorial_ranking-0.0.1-SNAPSHOT.jar
 ARG APP_DIR=/usr/src/tutorial-app
