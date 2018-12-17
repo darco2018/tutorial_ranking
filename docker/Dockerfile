@@ -1,9 +1,10 @@
 FROM ustrd/oracle-jdk-phusion:8
 VOLUME /tmp
 ENV JAR_NAME  tutorial_ranking-0.0.1-SNAPSHOT.jar
-RUN mkdir -p /usr/src/app
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+ARG APP_DIR=/usr/src/app
+RUN mkdir -p ${APP_DIR}
+COPY . ${APP_DIR}
+WORKDIR ${APP_DIR}
 ADD target/${JAR_NAME}   ${JAR_NAME}
 EXPOSE 8080
 #ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=mysql", "/tutorial_ranking-0.0.1-SNAPSHOT.jar"]
