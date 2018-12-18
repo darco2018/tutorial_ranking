@@ -5,16 +5,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import pl.ust.tr.domain.TutorialRating;
-import pl.ust.tr.domain.TutorialRatingPk;
 
 import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource(exported = false)
-public interface TutorialRatingRepository extends CrudRepository<TutorialRating, TutorialRatingPk> {
+public interface TutorialRatingRepository extends CrudRepository<TutorialRating, Integer> {
 
-    List<TutorialRating> findByPkTutorialId(Integer tutorialId);
-    Page<TutorialRating> findByPkTutorialId(Integer tutorialId, Pageable pageable);
+    List<TutorialRating> findByTutorialId(Integer tutorialId);
+    Page<TutorialRating> findByTutorialId(Integer tutorialId, Pageable pageable);
 
-    TutorialRating findByPkTutorialIdAndPkUserId(Integer tutorialId, Integer userId);
+    //TutorialRating findByTutorialIdAndUserId(Integer tutorialId, Integer userId);
+    Optional<TutorialRating> findByTutorialIdAndUserId(Integer tutorialId, Integer userId);
 
 }
