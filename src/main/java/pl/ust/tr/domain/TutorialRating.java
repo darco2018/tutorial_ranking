@@ -1,19 +1,24 @@
 package pl.ust.tr.domain;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "TutorialRating")
 public class TutorialRating implements Serializable {
+    //----------------
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    // will result in tutorial_id integer not null; user_id integer not null, primary key (tutorial_id, user_id)
-    @EmbeddedId
-    private TutorialRatingPk pk;
+    @ManyToOne
+    @JoinColumn(name = "tutorial_id")
+    private Tutorial tutorial;
+
+    @Column(name = "user_id")
+    private Integer userId;
+    // ---------------------
 
     @Column(columnDefinition = "smallint(2) unsigned", nullable = false, precision=2, scale=0)
     private Integer score;
@@ -21,29 +26,57 @@ public class TutorialRating implements Serializable {
     @Column(length=255)
     private String comment;
 
-    public TutorialRating(TutorialRatingPk pk, Integer score, String comment) {
-        this.pk = pk;
+    public TutorialRating(Tutorial tutorial, Integer userId, Integer score, String comment) {
+        this.tutorial = tutorial;
+        this.userId = userId;
         this.score = score;
         this.comment = comment;
     }
 
+    public TutorialRating(Tutorial tutorial, Integer userId, Integer score) {
+        this.tutorial = tutorial;
+        this.userId = userId;
+        this.score = score;
+    }
+
     protected TutorialRating(){}
 
-    @Override
-    public String toString() {
-        return "TutorialRating{" +
-                "pk=" + pk +
-                ", score=" + score +
-                ", comment='" + comment + '\'' +
-                '}';
+    /**
+     * Auto Generate a message for a score.
+    */
+    private String toComment(Integer score) {
+        switch (score) {
+            case 1:return "Terrible";
+            case 2:return "Poor";
+            case 3:return "Fair";
+            case 4:return "Good";
+            case 5:return "Great";
+            default: return score.toString();
+        }
     }
 
-    public TutorialRatingPk getPk() {
-        return pk;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPk(TutorialRatingPk pk) {
-        this.pk = pk;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Tutorial getTutorial() {
+        return tutorial;
+    }
+
+    public void setTutorial(Tutorial tutorial) {
+        this.tutorial = tutorial;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getScore() {
@@ -67,13 +100,26 @@ public class TutorialRating implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TutorialRating that = (TutorialRating) o;
-        return pk.equals(that.pk) &&
-                score.equals(that.score) &&
-                comment.equals(that.comment);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(tutorial, that.tutorial) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(score, that.score) &&
+                Objects.equals(comment, that.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pk, score, comment);
+        return Objects.hash(id, tutorial, userId, score, comment);
+    }
+
+    @Override
+    public String toString() {
+        return "TutorialRating{" +
+                "id=" + id +
+                ", tutorial=" + tutorial +
+                ", userId=" + userId +
+                ", score=" + score +
+                ", comment='" + comment + '\'' +
+                '}';
     }
 }
