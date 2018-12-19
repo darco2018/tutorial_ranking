@@ -117,7 +117,7 @@ public class TutorialRatingServiceIntegrationTest {
     //Happy Path get average score of a Tutorial.
     @Test
     public void getAverageScore() {
-        assertTrue(service.getAverageScore(TUTORIAL_ID) == 4.0);
+        assertTrue(service.getAverageScore(TUTORIAL_ID) == 5.0);
     }
 
     //UnHappy Path, Tutorial NOT_A_TUTORIAL_ID does not exist
