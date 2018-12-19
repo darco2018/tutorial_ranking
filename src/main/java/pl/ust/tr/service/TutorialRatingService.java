@@ -12,41 +12,50 @@ import pl.ust.tr.repository.TutorialRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.OptionalDouble;
 
 @Service
 @Transactional
 public class TutorialRatingService {
     private TutorialRatingRepository tutorialRatingRepository;
-    private TutorialRepository tourRepository;
+    private TutorialRepository tutorialRepository;
 
    
     @Autowired
-    public TutorialRatingService(TutorialRatingRepository tutorialRatingRepository, TutorialRepository tourRepository) {
+    public TutorialRatingService(TutorialRatingRepository tutorialRatingRepository, TutorialRepository tutorialRepository) {
         this.tutorialRatingRepository = tutorialRatingRepository;
-        this.tourRepository = tourRepository;
+        this.tutorialRepository = tutorialRepository;
     }
     
-    public void createNew(int tourId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
-        tutorialRatingRepository.save(new TutorialRating(verifyTutorial(tourId), customerId,
+    public void createNew(int tutorialId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
+        tutorialRatingRepository.save(new TutorialRating(verifyTutorial(tutorialId), customerId,
                 score, comment));
     }
+
+    public Optional<TutorialRating> lookupRatingById(int id){
+        return tutorialRatingRepository.findById(id);
+    }
     
-    public Page<TutorialRating> lookupRatings(int tourId, Pageable pageable) throws NoSuchElementException  {
-        return tutorialRatingRepository.findByTutorialId(verifyTutorial(tourId).getId(), pageable);
+    public Page<TutorialRating> lookupRatingById(int tutorialId, Pageable pageable) throws NoSuchElementException  {
+        return tutorialRatingRepository.findByTutorialId(verifyTutorial(tutorialId).getId(), pageable);
+    }
+
+    public List<TutorialRating> lookupAll(){
+        return tutorialRatingRepository.findAll();
     }
    
-    public TutorialRating update(int tourId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
-        TutorialRating rating = verifyTutorialRating(tourId, customerId);
+    public TutorialRating update(int tutorialId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
+        TutorialRating rating = verifyTutorialRating(tutorialId, customerId);
         rating.setScore(score);
         rating.setComment(comment);
         return tutorialRatingRepository.save(rating);
     }
 
     
-    public TutorialRating updateSome(int tourId, Integer customerId, Integer score, String comment)
+    public TutorialRating updateSome(int tutorialId, Integer customerId, Integer score, String comment)
             throws NoSuchElementException {
-        TutorialRating rating = verifyTutorialRating(tourId, customerId);
+        TutorialRating rating = verifyTutorialRating(tutorialId, customerId);
         if (score != null) {
             rating.setScore(score);
         }
@@ -56,35 +65,35 @@ public class TutorialRatingService {
         return tutorialRatingRepository.save(rating);
     }
     
-    public void delete(int tourId, Integer customerId) throws NoSuchElementException {
-        TutorialRating rating = verifyTutorialRating(tourId, customerId);
+    public void delete(int tutorialId, Integer customerId) throws NoSuchElementException {
+        TutorialRating rating = verifyTutorialRating(tutorialId, customerId);
         tutorialRatingRepository.delete(rating);
     }
    
-    public Double getAverageScore(int tourId)  throws NoSuchElementException  {
-        List<TutorialRating> ratings = tutorialRatingRepository.findByTutorialId(verifyTutorial(tourId).getId());
+    public Double getAverageScore(int tutorialId)  throws NoSuchElementException  {
+        List<TutorialRating> ratings = tutorialRatingRepository.findByTutorialId(verifyTutorial(tutorialId).getId());
         OptionalDouble average = ratings.stream().mapToInt((rating) -> rating.getScore()).average();
         return average.isPresent() ? average.getAsDouble():null;
     }
     
-    public void rateMany(int tourId,  int score, Integer [] customers) {
-        tourRepository.findById(tourId).ifPresent(tour -> {
+    public void rateMany(int tutorialId,  int score, Integer [] customers) {
+        tutorialRepository.findById(tutorialId).ifPresent(tutorial -> {
             for (Integer c : customers) {
-                tutorialRatingRepository.save(new TutorialRating(tour, c, score));
+                tutorialRatingRepository.save(new TutorialRating(tutorial, c, score));
             }
         });
     }
    
-    private Tutorial verifyTutorial(int tourId) throws NoSuchElementException {
-        return tourRepository.findById(tourId).orElseThrow(() ->
-                new NoSuchElementException("Tutorial does not exist " + tourId)
+    private Tutorial verifyTutorial(int tutorialId) throws NoSuchElementException {
+        return tutorialRepository.findById(tutorialId).orElseThrow(() ->
+                new NoSuchElementException("Tutorial does not exist " + tutorialId)
         );
     }
     
-    private TutorialRating verifyTutorialRating(int tourId, int customerId) throws NoSuchElementException {
-        return tutorialRatingRepository.findByTutorialIdAndUserId(tourId, customerId).orElseThrow(() ->
+    private TutorialRating verifyTutorialRating(int tutorialId, int customerId) throws NoSuchElementException {
+        return tutorialRatingRepository.findByTutorialIdAndUserId(tutorialId, customerId).orElseThrow(() ->
                 new NoSuchElementException("Tutorial-Rating pair for request("
-                        + tourId + " for customer" + customerId));
+                        + tutorialId + " for customer" + customerId));
     }
 
 

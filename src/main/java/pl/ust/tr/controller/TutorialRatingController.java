@@ -42,7 +42,7 @@ public class TutorialRatingController {
     public Page<RatingDto> getAllRatingsForTutorialPageable(@PathVariable(value = "tutorialId") int tutorialId,
                                                             Pageable pageable){
 
-        Page<TutorialRating> page = tutorialRatingService.lookupRatings(tutorialId, pageable);
+        Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
         List<RatingDto> ratingDtoList = page.getContent()
                                               .stream()
                                               .map(tutorialRating -> toDto(tutorialRating))
