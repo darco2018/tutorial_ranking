@@ -37,6 +37,7 @@ public class TutorialRating implements Serializable {
         this.tutorial = tutorial;
         this.userId = userId;
         this.score = score;
+        this.comment = this.toComment(score);
     }
 
     protected TutorialRating(){}
