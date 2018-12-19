@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,12 @@ import java.util.stream.Collectors;
 public class TutorialRatingController {
 
     private TutorialRatingService tutorialRatingService;
+    private RatingAssembler ratingAssembler;
 
     @Autowired
-    public TutorialRatingController(TutorialRatingService tutorialRatingService) {
+    public TutorialRatingController(TutorialRatingService tutorialRatingService, RatingAssembler ratingAssembler) {
         this.tutorialRatingService = tutorialRatingService;
+        this.ratingAssembler = ratingAssembler;
     }
 
     protected TutorialRatingController(){}
@@ -39,17 +43,20 @@ public class TutorialRatingController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Page<RatingDto> getAllRatingsForTutorialPageable(@PathVariable(value = "tutorialId") int tutorialId,
-                                                            Pageable pageable){
-
+    public PagedResources<RatingDto> getAllRatingsForTutorialPageable(@PathVariable(value = "tutorialId") int tutorialId,
+                                                                                Pageable pageable,
+                                                                                PagedResourcesAssembler pagedAssembler){
+                                                                                // generate HATEOUS links for previous, next, last, etc.
         Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
+        return pagedAssembler.toResource(page, ratingAssembler);
+
+        /*Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
         List<RatingDto> ratingDtoList = page.getContent()
                                               .stream()
                                               .map(tutorialRating -> toDto(tutorialRating))
                                               .collect(Collectors.toList());
 
-        return new PageImpl<RatingDto>(ratingDtoList, pageable, page.getTotalPages());
-
+        return new PageImpl<RatingDto>(ratingDtoList, pageable, page.getTotalPages());*/
     }
 
 
