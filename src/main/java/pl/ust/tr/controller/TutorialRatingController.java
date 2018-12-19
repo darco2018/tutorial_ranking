@@ -11,6 +11,7 @@ import pl.ust.tr.domain.Tutorial;
 import pl.ust.tr.domain.TutorialRating;
 import pl.ust.tr.repository.TutorialRatingRepository;
 import pl.ust.tr.repository.TutorialRepository;
+import pl.ust.tr.service.TutorialRatingService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,13 +20,11 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/tutorials/{tutorialId}/ratings")
 public class TutorialRatingController {
 
-    private TutorialRatingRepository tutorialRatingRepository;
-    private TutorialRepository tutorialRepository;
+    private TutorialRatingService tutorialRatingService;
 
     @Autowired
-    public TutorialRatingController(TutorialRatingRepository tutorialRatingRepository, TutorialRepository tutorialRepository) {
-        this.tutorialRatingRepository = tutorialRatingRepository;
-        this.tutorialRepository = tutorialRepository;
+    public TutorialRatingController(TutorialRatingService tutorialRatingService) {
+        this.tutorialRatingService = tutorialRatingService;
     }
 
     protected TutorialRatingController(){}
@@ -35,9 +34,7 @@ public class TutorialRatingController {
     public void createTutorialRating(@PathVariable(value = "tutorialId") int tutorialId,
                                      @RequestBody @Validated RatingDto ratingDto){
 
-        Tutorial tutorial = verifyTutorial(tutorialId);
-        tutorialRatingRepository.save(
-                new TutorialRating(tutorial, ratingDto.getUserId(),ratingDto.getScore(), ratingDto.getComment()));
+        tutorialRatingService.createNew(tutorialId, ratingDto.getUserId(),ratingDto.getScore(), ratingDto.getComment());
 
     }
 
@@ -45,8 +42,7 @@ public class TutorialRatingController {
     public Page<RatingDto> getAllRatingsForTutorialPageable(@PathVariable(value = "tutorialId") int tutorialId,
                                                             Pageable pageable){
 
-        verifyTutorial(tutorialId);
-        Page<TutorialRating> page = tutorialRatingRepository.findByTutorialId(tutorialId, pageable);
+        Page<TutorialRating> page = tutorialRatingService.lookupRatings(tutorialId, pageable);
         List<RatingDto> ratingDtoList = page.getContent()
                                               .stream()
                                               .map(tutorialRating -> toDto(tutorialRating))
@@ -56,37 +52,18 @@ public class TutorialRatingController {
 
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, path = "/average")
-    public String getTutorialAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
-
-        List<TutorialRating> ratings = getRatings(tutorialId);
-
-        double sum = 0.0;
-        //ratings.forEach(rating -> sum += rating.getScore());
-        for (TutorialRating rating : ratings) {
-            sum += rating.getScore();
-        }
-        return "average: " +  sum / (double)ratings.size();
-    }*/
 
     @RequestMapping(method = RequestMethod.GET, path = "/average")
     public AbstractMap.SimpleEntry<String, Double> getAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
-        List<TutorialRating> ratings = getRatings(tutorialId);
-        OptionalDouble average = ratings
-                .stream()
-                .mapToDouble(TutorialRating::getScore)
-                .average();
-        return new AbstractMap.SimpleEntry<>("average", average.isPresent() ? average.getAsDouble() : null);
+        return new AbstractMap.SimpleEntry<>("average", tutorialRatingService.getAverageScore(tutorialId));
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     public RatingDto updateWithPut(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
 
-        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, ratingDto.getUserId());
-        tutorialRating.setScore(ratingDto.getScore());
-        tutorialRating.setComment(ratingDto.getComment());
-        return toDto(tutorialRatingRepository.save(tutorialRating));
+        return toDto(tutorialRatingService.update(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
+                ratingDto.getComment()));
 
     }
 
@@ -94,43 +71,18 @@ public class TutorialRatingController {
     public RatingDto updateWithPatch(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
 
-        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, ratingDto.getUserId());
-        if(ratingDto.getScore() != null){
-            tutorialRating.setScore(ratingDto.getScore());
-        }
-
-        if(ratingDto.getComment() != null){
-            tutorialRating.setComment(ratingDto.getComment());
-        }
-
-        return toDto(tutorialRatingRepository.save(tutorialRating));
+        return toDto(tutorialRatingService.updateSome(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
+                ratingDto.getComment()));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{userId}")
     public void delete(@PathVariable (value = "tutorialId") int tutorialId,
                        @PathVariable (value = "userId") int userId){
-        TutorialRating tutorialRating = verifyTutorialRating(tutorialId, userId);
-        tutorialRatingRepository.delete(tutorialRating);
+
+        tutorialRatingService.delete(tutorialId, userId);
     }
 
     ////////////////////////////////// HELPERS ////////////////////////////////
-    private List<TutorialRating> getRatings(int tutorialId){
-        verifyTutorial(tutorialId);
-        return tutorialRatingRepository.findByTutorialId(tutorialId);
-    }
-
-    private TutorialRating verifyTutorialRating(int tutorialId, int userId) throws NoSuchElementException {
-        return tutorialRatingRepository.findByTutorialIdAndUserId(tutorialId, userId).orElseThrow(() ->
-            new NoSuchElementException("There's no rating for tutorial " + tutorialId + " userId: " + userId));
-    }
-
-
-
-    private Tutorial verifyTutorial(int tutorialId) throws NoSuchElementException {
-        return tutorialRepository.findById(tutorialId).orElseThrow(() ->
-            new NoSuchElementException("No such tutorial in the database: " + tutorialId));
-
-    }
 
     private RatingDto toDto(TutorialRating tutorialRating){
         return new RatingDto(tutorialRating.getScore(), tutorialRating.getComment(), tutorialRating.getUserId());
