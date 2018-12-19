@@ -36,13 +36,13 @@ public class TutorialRatingService {
     public Optional<TutorialRating> lookupRatingById(int id){
         return tutorialRatingRepository.findById(id);
     }
-    
-    public Page<TutorialRating> lookupRatingById(int tutorialId, Pageable pageable) throws NoSuchElementException  {
-        return tutorialRatingRepository.findByTutorialId(verifyTutorial(tutorialId).getId(), pageable);
-    }
 
     public List<TutorialRating> lookupAll(){
         return tutorialRatingRepository.findAll();
+    }
+    
+    public Page<TutorialRating> lookupRatings(int tutorialId, Pageable pageable) throws NoSuchElementException  {
+        return tutorialRatingRepository.findByTutorialId(verifyTutorial(tutorialId).getId(), pageable);
     }
    
     public TutorialRating update(int tutorialId, Integer customerId, Integer score, String comment) throws NoSuchElementException {
@@ -90,7 +90,7 @@ public class TutorialRatingService {
         );
     }
     
-    private TutorialRating verifyTutorialRating(int tutorialId, int customerId) throws NoSuchElementException {
+    public TutorialRating verifyTutorialRating(int tutorialId, int customerId) throws NoSuchElementException {
         return tutorialRatingRepository.findByTutorialIdAndUserId(tutorialId, customerId).orElseThrow(() ->
                 new NoSuchElementException("Tutorial-Rating pair for request("
                         + tutorialId + " for customer" + customerId));

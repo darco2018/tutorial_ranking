@@ -47,7 +47,7 @@ public class TutorialRatingController {
                                                                                 Pageable pageable,
                                                                                 PagedResourcesAssembler pagedAssembler){
                                                                                 // generate HATEOUS links for previous, next, last, etc.
-        Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
+        Page<TutorialRating> page = tutorialRatingService.lookupRatings(tutorialId, pageable);
         return pagedAssembler.toResource(page, ratingAssembler);
 
         /*Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
