@@ -16,9 +16,9 @@ public class MediumTest {
 
     @Test
     public void getLabel() throws Exception {
-        assertThat(Medium.VIDEO.getValueForDb(), is("Video"));
-        assertThat(Medium.ARTICLE.getValueForDb(), is("Article"));
-        assertThat(Medium.COURSE.getValueForDb(), is("Course"));
+        assertThat(Medium.VIDEO.toDbValue(), is("Video"));
+        assertThat(Medium.ARTICLE.toDbValue(), is("Article"));
+        assertThat(Medium.COURSE.toDbValue(), is("Course"));
     }
 
 }

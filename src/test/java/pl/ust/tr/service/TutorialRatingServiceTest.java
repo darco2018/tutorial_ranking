@@ -29,17 +29,17 @@ public class TutorialRatingServiceTest {
     private static final int TUTORIAL_RATING_ID = 100;
 
     @Mock
-    private TutorialRepository tutorialRepositoryMock;
+    private TutorialRepository tutorialRepository;
     @Mock
-    private TutorialRatingRepository tutorialRatingRepositoryMock;
+    private TutorialRatingRepository tRatingRepository;
 
-    @InjectMocks //Autowire TutorialRatingService(tutorialRatingRepositoryMock, tutorialRepositoryMock)
+    @InjectMocks //Autowire TutorialRatingService(tRatingRepository, tutorialRepository)
     private TutorialRatingService service;
 
     @Mock
-    private Tutorial tutorialMock;
+    private Tutorial tutorial;
     @Mock
-    private TutorialRating tutorialRatingMock;
+    private TutorialRating tRating;
 
 
     /**
@@ -47,10 +47,10 @@ public class TutorialRatingServiceTest {
      */
     @Before
     public void setupReturnValuesOfMockMethods() {
-        when(tutorialRepositoryMock.findById(TUTORIAL_ID)).thenReturn(Optional.of(tutorialMock));
-        when(tutorialMock.getId()).thenReturn(TUTORIAL_ID);
-        when(tutorialRatingRepositoryMock.findByTutorialIdAndUserId(TUTORIAL_ID,USER_ID)).thenReturn(Optional.of(tutorialRatingMock));
-        when(tutorialRatingRepositoryMock.findByTutorialId(TUTORIAL_ID)).thenReturn(Arrays.asList(tutorialRatingMock));
+        when(tutorialRepository.findById(TUTORIAL_ID)).thenReturn(Optional.of(tutorial));
+        when(tutorial.getId()).thenReturn(TUTORIAL_ID);
+        when(tRatingRepository.findByTutorialIdAndUserId(TUTORIAL_ID,USER_ID)).thenReturn(Optional.of(tRating));
+        when(tRatingRepository.findByTutorialId(TUTORIAL_ID)).thenReturn(Arrays.asList(tRating));
     }
 
     /**************************************************************************************
@@ -60,26 +60,27 @@ public class TutorialRatingServiceTest {
      **************************************************************************************/
     @Test
     public void lookupRatingById() {
-        when(tutorialRatingRepositoryMock.findById(TUTORIAL_RATING_ID)).thenReturn(Optional.of(tutorialRatingMock));
+        when(tRatingRepository.findById(TUTORIAL_RATING_ID)).thenReturn(Optional.of(tRating));
 
         //invoke and verify lookupRatingById
-        assertThat(service.lookupRatingById(TUTORIAL_RATING_ID).get(), is(tutorialRatingMock));
+        assertThat(service.lookupRatingById(TUTORIAL_RATING_ID).get(), is(tRating));
     }
 
     @Test
     public void lookupAll() {
-        when(tutorialRatingRepositoryMock.findAll()).thenReturn(Arrays.asList(tutorialRatingMock));
+        when(tRatingRepository.findAll()).thenReturn(Arrays.asList(tRating));
 
         //invoke and verify lookupAll
-        assertThat(service.lookupAll().get(0), is(tutorialRatingMock));
+        assertThat(service.lookupAll().get(0), is(tRating));
     }
 
     @Test
     public void getAverageScore() {
-        when(tutorialRatingMock.getScore()).thenReturn(10);
+        //when(tRatingRepository.findByTutorialId(TUTORIAL_ID)).thenReturn(Arrays.asList(tRating));
+        when(tRating.getScore()).thenReturn(5);
 
         //invoke and verify getAverageScore
-        assertThat(service.getAverageScore(TUTORIAL_ID), is(10.0));
+        assertThat(service.getAverageScore(TUTORIAL_ID), is(5.0));
     }
 
     @Test
@@ -87,7 +88,7 @@ public class TutorialRatingServiceTest {
         //create mocks of Pageable and Page (only needed in this test)
         Pageable pageable = mock(Pageable.class);
         Page page = mock(Page.class);
-        when(tutorialRatingRepositoryMock.findByTutorialId(1, pageable)).thenReturn(page);
+        when(tRatingRepository.findByTutorialId(1, pageable)).thenReturn(page);
 
         //invoke and verify lookupRatings
         assertThat(service.lookupRatings(TUTORIAL_ID, pageable), is(page));
@@ -102,10 +103,10 @@ public class TutorialRatingServiceTest {
     @Test
     public void delete() {
         //invoke delete
-        service.delete(1,USER_ID);
+        service.delete(TUTORIAL_ID,USER_ID);
 
         //verify tutorialRatingRepository.delete invoked
-        verify(tutorialRatingRepositoryMock).delete(any(TutorialRating.class));
+        verify(tRatingRepository).delete(any(TutorialRating.class));
     }
 
     @Test
@@ -114,7 +115,7 @@ public class TutorialRatingServiceTest {
         service.rateMany(TUTORIAL_ID, 10, new Integer[]{USER_ID, USER_ID + 1});
 
         //verify tutorialRatingRepository.save invoked twice
-        verify(tutorialRatingRepositoryMock, times(2)).save(any(TutorialRating.class));
+        verify(tRatingRepository, times(2)).save(any(TutorialRating.class));
     }
 
     @Test
@@ -123,11 +124,11 @@ public class TutorialRatingServiceTest {
         service.update(TUTORIAL_ID,USER_ID,5, "great");
 
         //verify tutorialRatingRepository.save invoked once
-        verify(tutorialRatingRepositoryMock).save(any(TutorialRating.class));
+        verify(tRatingRepository).save(any(TutorialRating.class));
 
         //verify and tutorialRating setter methods invoked
-        verify(tutorialRatingMock).setComment("great");
-        verify(tutorialRatingMock).setScore(5);
+        verify(tRating).setComment("great");
+        verify(tRating).setScore(5);
     }
 
     @Test
@@ -136,11 +137,11 @@ public class TutorialRatingServiceTest {
         service.updateSome(TUTORIAL_ID, USER_ID, 1, "awful");
 
         //verify tutorialRatingRepository.save invoked once
-        verify(tutorialRatingRepositoryMock).save(any(TutorialRating.class));
+        verify(tRatingRepository).save(any(TutorialRating.class));
 
         //verify and tutorialRating setter methods invoked
-        verify(tutorialRatingMock).setComment("awful");
-        verify(tutorialRatingMock).setScore(1);
+        verify(tRating).setComment("awful");
+        verify(tRating).setScore(1);
     }
 
      /**************************************************************************************
@@ -160,10 +161,10 @@ public class TutorialRatingServiceTest {
         service.createNew(TUTORIAL_ID, USER_ID, 2, "ok");
 
         //verify tutorialRatingRepository.save invoked once and capture the TutorialRating Object
-        verify(tutorialRatingRepositoryMock).save(tutorialRatingCaptor.capture());
+        verify(tRatingRepository).save(tutorialRatingCaptor.capture());
 
         //verify the attributes of the Tutorial Rating Object
-        assertThat(tutorialRatingCaptor.getValue().getTutorial(), is(tutorialMock));
+        assertThat(tutorialRatingCaptor.getValue().getTutorial(), is(tutorial));
         assertThat(tutorialRatingCaptor.getValue().getUserId(), is(USER_ID));
         assertThat(tutorialRatingCaptor.getValue().getScore(), is(2));
         assertThat(tutorialRatingCaptor.getValue().getComment(), is("ok"));

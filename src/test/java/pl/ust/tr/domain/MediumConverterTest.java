@@ -10,12 +10,12 @@ public class MediumConverterTest {
     private MediumConverter converter = new MediumConverter();
     @Test
     public void convertToDatabaseColumn() throws Exception {
-        assertThat(converter.convertToDatabaseColumn(Medium.ARTICLE), is(Medium.ARTICLE.getValueForDb()));
+        assertThat(converter.convertToDatabaseColumn(Medium.ARTICLE), is(Medium.ARTICLE.toDbValue()));
     }
 
     @Test
     public void convertToEntityAttribute() throws Exception {
-        assertThat(converter.convertToEntityAttribute(Medium.ARTICLE.getValueForDb()), is(Medium.ARTICLE));
+        assertThat(converter.convertToEntityAttribute(Medium.ARTICLE.toDbValue()), is(Medium.ARTICLE));
     }
 
 }

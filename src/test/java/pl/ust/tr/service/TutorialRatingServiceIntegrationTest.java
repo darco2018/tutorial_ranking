@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class TutorialRatingServiceIntegrationTest {
     private static final int USER_ID = 456;
     private static final int TUTORIAL_ID = 1;
-    private static final int NOT_A_TUTORIAL_ID = 123;
+    private static final int NOT_EXISTING_TUTORIAL_ID = 123;
 
     @Autowired
     private TutorialRatingService service;
@@ -36,10 +36,10 @@ public class TutorialRatingServiceIntegrationTest {
         assertThat(service.lookupAll().size(), is(tutorialRatings.size() - 1));
     }
 
-    //UnHappy Path, Tutorial NOT_A_TUTORIAL_ID does not exist
+    //UnHappy Path, Tutorial NOT_EXISTING_TUTORIAL_ID does not exist
     @Test(expected = NoSuchElementException.class)
     public void deleteException() {
-        service.delete(NOT_A_TUTORIAL_ID, 1234);
+        service.delete(NOT_EXISTING_TUTORIAL_ID, 1234);
     }
 
 
@@ -57,10 +57,10 @@ public class TutorialRatingServiceIntegrationTest {
         assertThat(newTutorialRating.getComment(), is ("it was fair"));
     }
 
-    //UnHappy Path, Tutorial NOT_A_TUTORIAL_ID does not exist
+    //UnHappy Path, Tutorial NOT_EXISTING_TUTORIAL_ID does not exist
     @Test(expected = NoSuchElementException.class)
     public void createNewException() {
-        service.createNew(NOT_A_TUTORIAL_ID, USER_ID, 2, "it was fair");
+        service.createNew(NOT_EXISTING_TUTORIAL_ID, USER_ID, 2, "it was fair");
     }
 
     //Happy Path many customers Rate one tutorial
@@ -94,7 +94,7 @@ public class TutorialRatingServiceIntegrationTest {
     //Unhappy path, no Tutorial Rating exists for tutorialId=1 and customer=1
     @Test(expected = NoSuchElementException.class)
     public void updateException() throws Exception {
-        service.update(1, 1, 1, "one");
+        service.update(12345, 54321, 1, "one");
     }
 
     //Happy Path, Update a Tutorial Rating already in the database
@@ -111,7 +111,7 @@ public class TutorialRatingServiceIntegrationTest {
     //Unhappy path, no Tutorial Rating exists for tutorialId=1 and customer=1
     @Test(expected = NoSuchElementException.class)
     public void updateSomeException() throws Exception {
-        service.update(1, 1, 1, "one");
+        service.update(12345, 54321, 1, "one");
     }
 
     //Happy Path get average score of a Tutorial.
@@ -120,9 +120,9 @@ public class TutorialRatingServiceIntegrationTest {
         assertTrue(service.getAverageScore(TUTORIAL_ID) == 5.0);
     }
 
-    //UnHappy Path, Tutorial NOT_A_TUTORIAL_ID does not exist
+    //UnHappy Path, Tutorial NOT_EXISTING_TUTORIAL_ID does not exist
     @Test(expected = NoSuchElementException.class)
     public void getAverageScoreException() {
-        service.getAverageScore(NOT_A_TUTORIAL_ID); //That tutorial does not exist
+        service.getAverageScore(NOT_EXISTING_TUTORIAL_ID); //That tutorial does not exist
     }
 }
