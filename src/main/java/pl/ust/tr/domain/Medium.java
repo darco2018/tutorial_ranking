@@ -9,7 +9,7 @@ public enum Medium {
     private Medium(String dbValue) { this.dbValue = dbValue;
     }
 
-    public String getValueForDb() {
+    public String toDbValue() {
         return dbValue;
     }
 

@@ -1,7 +1,5 @@
 package pl.ust.tr.domain;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
@@ -10,7 +8,7 @@ public class MediumConverter implements AttributeConverter<Medium, String> {
 
     @Override
     public String convertToDatabaseColumn(Medium medium) {
-        return medium.getValueForDb();
+        return medium.toDbValue();
     }
 
     @Override
