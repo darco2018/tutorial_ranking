@@ -1,5 +1,6 @@
 package pl.ust.tr.controller;
 
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ import pl.ust.tr.service.TutorialRatingService;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Api(description = "API just tu pull ratings")
 @RestController
 @RequestMapping(path = "/ratings")
 public class RatingController {
@@ -27,13 +29,19 @@ public class RatingController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Find all ratings")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK"))
     public List<RatingDto> getAll() {
         LOGGER.info("GET /ratings");
         return assembler.toResources(tutorialRatingService.lookupAll());
     }
 
     @GetMapping("/{id}")
-    public RatingDto getRating(@PathVariable("id") Integer id) {
+    @ApiOperation(value = "Find ratings by id")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Rating not found") })
+    public RatingDto getRating( @ApiParam(value = "rating identifier")
+                                @PathVariable("id") Integer id) {
+
         LOGGER.info("GET /ratings/{id}", id);
         return assembler.toResource(tutorialRatingService.lookupRatingById(id)
                 .orElseThrow(() -> new NoSuchElementException("Rating " + id + " not found"))
