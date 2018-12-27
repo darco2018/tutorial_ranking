@@ -1,6 +1,10 @@
-package pl.ust.tr.domain;
+package pl.ust.tr.tutorial;
 
 import org.junit.Test;
+import pl.ust.tr.domain.Level;
+import pl.ust.tr.domain.Medium;
+import pl.ust.tr.skill.Skill;
+import pl.ust.tr.tutorial.Tutorial;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;

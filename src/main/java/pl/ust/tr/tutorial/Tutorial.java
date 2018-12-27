@@ -1,4 +1,8 @@
-package pl.ust.tr.domain;
+package pl.ust.tr.tutorial;
+
+import pl.ust.tr.domain.Level;
+import pl.ust.tr.domain.Medium;
+import pl.ust.tr.skill.Skill;
 
 import javax.persistence.*;
 import java.io.Serializable;

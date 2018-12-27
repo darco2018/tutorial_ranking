@@ -1,47 +1,40 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pl.ust.tr.domain.Tutorial;
-import pl.ust.tr.domain.TutorialRating;
-import pl.ust.tr.repository.TutorialRatingRepository;
-import pl.ust.tr.repository.TutorialRepository;
-import pl.ust.tr.service.TutorialRatingService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/tutorials/{tutorialId}/ratings")
-public class TutorialRatingController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TutorialRatingController.class);
+public class RateSingleTutorialController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RateSingleTutorialController.class);
 
-    private TutorialRatingService tutorialRatingService;
+    private RatingService ratingService;
     private RatingAssembler ratingAssembler;
 
     @Autowired
-    public TutorialRatingController(TutorialRatingService tutorialRatingService, RatingAssembler ratingAssembler) {
-        this.tutorialRatingService = tutorialRatingService;
+    public RateSingleTutorialController(RatingService ratingService, RatingAssembler ratingAssembler) {
+        this.ratingService = ratingService;
         this.ratingAssembler = ratingAssembler;
     }
 
-    protected TutorialRatingController(){}
+    protected RateSingleTutorialController(){}
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createTutorialRating(@PathVariable(value = "tutorialId") int tutorialId,
                                      @RequestBody @Validated RatingDto ratingDto){
         LOGGER.info("POST /tours/{}/ratings", tutorialId);
-        tutorialRatingService.createNew(tutorialId, ratingDto.getUserId(),ratingDto.getScore(), ratingDto.getComment());
+        ratingService.createNew(tutorialId, ratingDto.getUserId(),ratingDto.getScore(), ratingDto.getComment());
 
     }
 
@@ -51,10 +44,10 @@ public class TutorialRatingController {
                                                                                 PagedResourcesAssembler pagedAssembler){
                                                                                 // generate HATEOUS links for previous, next, last, etc.
         LOGGER.info("GET /tours/{}/ratings", tutorialId);
-        Page<TutorialRating> page = tutorialRatingService.lookupRatings(tutorialId, pageable);
+        Page<Rating> page = ratingService.lookupRatings(tutorialId, pageable);
         return pagedAssembler.toResource(page, ratingAssembler);
 
-        /*Page<TutorialRating> page = tutorialRatingService.lookupRatingById(tutorialId, pageable);
+        /*Page<Rating> page = ratingService.lookupRatingById(tutorialId, pageable);
         List<RatingDto> ratingDtoList = page.getContent()
                                               .stream()
                                               .map(tutorialRating -> toDto(tutorialRating))
@@ -68,14 +61,14 @@ public class TutorialRatingController {
     public AbstractMap.SimpleEntry<String, Double> getAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
 
         LOGGER.info("GET /tours/{}/ratings/average", tutorialId);
-        return new AbstractMap.SimpleEntry<>("average", tutorialRatingService.getAverageScore(tutorialId));
+        return new AbstractMap.SimpleEntry<>("average", ratingService.getAverageScore(tutorialId));
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     public RatingDto updateWithPut(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
         LOGGER.info("PUT /tours/{}/ratings", tutorialId);
-        return toDto(tutorialRatingService.update(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
+        return toDto(ratingService.update(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
                 ratingDto.getComment()));
 
     }
@@ -84,7 +77,7 @@ public class TutorialRatingController {
     public RatingDto updateWithPatch(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
         LOGGER.info("PATCH /tours/{}/ratings", tutorialId);
-        return toDto(tutorialRatingService.updateSome(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
+        return toDto(ratingService.updateSome(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
                 ratingDto.getComment()));
     }
 
@@ -92,13 +85,13 @@ public class TutorialRatingController {
     public void delete(@PathVariable (value = "tutorialId") int tutorialId,
                        @PathVariable (value = "userId") int userId){
         LOGGER.info("DELETE /tours/{}/ratings/{}", tutorialId, userId);
-        tutorialRatingService.delete(tutorialId, userId);
+        ratingService.delete(tutorialId, userId);
     }
 
     ////////////////////////////////// HELPERS ////////////////////////////////
 
-    private RatingDto toDto(TutorialRating tutorialRating){
-        return new RatingDto(tutorialRating.getScore(), tutorialRating.getComment(), tutorialRating.getUserId());
+    private RatingDto toDto(Rating rating){
+        return new RatingDto(rating.getScore(), rating.getComment(), rating.getUserId());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

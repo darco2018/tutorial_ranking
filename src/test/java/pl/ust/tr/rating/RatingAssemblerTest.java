@@ -1,4 +1,4 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,8 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.hateoas.Link;
-import pl.ust.tr.domain.Tutorial;
-import pl.ust.tr.domain.TutorialRating;
+import pl.ust.tr.rating.Rating;
+import pl.ust.tr.rating.RatingAssembler;
+import pl.ust.tr.rating.RatingDto;
+import pl.ust.tr.tutorial.Tutorial;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -31,19 +33,19 @@ public class RatingAssemblerTest {
 
     @Test
     public void toResource() {
-        TutorialRating tutorialRatingMock = mock(TutorialRating.class);
+        Rating ratingMock = mock(Rating.class);
         Tutorial tutorialMock = mock(Tutorial.class);
         Link linkMock = mock(Link.class);
         
-        when(tutorialRatingMock.getComment()).thenReturn(COMMENT);
-        when(tutorialRatingMock.getScore()).thenReturn(SCORE);
-        when(tutorialRatingMock.getUserId()).thenReturn(USER);
-        when(tutorialRatingMock.getId()).thenReturn(RATING_ID);
-        when(tutorialRatingMock.getTutorial()).thenReturn(tutorialMock);
+        when(ratingMock.getComment()).thenReturn(COMMENT);
+        when(ratingMock.getScore()).thenReturn(SCORE);
+        when(ratingMock.getUserId()).thenReturn(USER);
+        when(ratingMock.getId()).thenReturn(RATING_ID);
+        when(ratingMock.getTutorial()).thenReturn(tutorialMock);
         when(entityLinksMock.linkToSingleResource(any(Class.class), anyInt())).thenReturn(linkMock);
         when(linkMock.withRel(anyString())).thenReturn(linkMock);
 
-        RatingDto dto = assembler.toResource(tutorialRatingMock);
+        RatingDto dto = assembler.toResource(ratingMock);
         assertThat(dto.getLinks().size(), is(2));
     }
 }

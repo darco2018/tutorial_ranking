@@ -1,6 +1,7 @@
-package pl.ust.tr.domain;
+package pl.ust.tr.skill;
 
 import org.junit.Test;
+import pl.ust.tr.skill.Skill;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;

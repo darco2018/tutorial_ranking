@@ -1,4 +1,4 @@
-package pl.ust.tr.service;
+package pl.ust.tr.rating;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,10 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import pl.ust.tr.domain.Tutorial;
-import pl.ust.tr.domain.TutorialRating;
-import pl.ust.tr.repository.TutorialRatingRepository;
-import pl.ust.tr.repository.TutorialRepository;
+import pl.ust.tr.rating.Rating;
+import pl.ust.tr.rating.RatingService;
+import pl.ust.tr.tutorial.Tutorial;
+import pl.ust.tr.rating.RatingRepository;
+import pl.ust.tr.tutorial.TutorialRepository;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TutorialRatingServiceTest {
+public class RatingServiceTest {
 
     private static final int USER_ID = 123;
     private static final int TUTORIAL_ID = 1;
@@ -31,15 +32,15 @@ public class TutorialRatingServiceTest {
     @Mock
     private TutorialRepository tutorialRepository;
     @Mock
-    private TutorialRatingRepository tRatingRepository;
+    private RatingRepository tRatingRepository;
 
-    @InjectMocks //Autowire TutorialRatingService(tRatingRepository, tutorialRepository)
-    private TutorialRatingService service;
+    @InjectMocks //Autowire RatingService(tRatingRepository, tutorialRepository)
+    private RatingService service;
 
     @Mock
     private Tutorial tutorial;
     @Mock
-    private TutorialRating tRating;
+    private Rating tRating;
 
 
     /**
@@ -106,7 +107,7 @@ public class TutorialRatingServiceTest {
         service.delete(TUTORIAL_ID,USER_ID);
 
         //verify tutorialRatingRepository.delete invoked
-        verify(tRatingRepository).delete(any(TutorialRating.class));
+        verify(tRatingRepository).delete(any(Rating.class));
     }
 
     @Test
@@ -115,7 +116,7 @@ public class TutorialRatingServiceTest {
         service.rateMany(TUTORIAL_ID, 10, new Integer[]{USER_ID, USER_ID + 1});
 
         //verify tutorialRatingRepository.save invoked twice
-        verify(tRatingRepository, times(2)).save(any(TutorialRating.class));
+        verify(tRatingRepository, times(2)).save(any(Rating.class));
     }
 
     @Test
@@ -124,7 +125,7 @@ public class TutorialRatingServiceTest {
         service.update(TUTORIAL_ID,USER_ID,5, "great");
 
         //verify tutorialRatingRepository.save invoked once
-        verify(tRatingRepository).save(any(TutorialRating.class));
+        verify(tRatingRepository).save(any(Rating.class));
 
         //verify and tutorialRating setter methods invoked
         verify(tRating).setComment("great");
@@ -137,7 +138,7 @@ public class TutorialRatingServiceTest {
         service.updateSome(TUTORIAL_ID, USER_ID, 1, "awful");
 
         //verify tutorialRatingRepository.save invoked once
-        verify(tRatingRepository).save(any(TutorialRating.class));
+        verify(tRatingRepository).save(any(Rating.class));
 
         //verify and tutorialRating setter methods invoked
         verify(tRating).setComment("awful");
@@ -154,13 +155,13 @@ public class TutorialRatingServiceTest {
 
      @Test
     public void createNew() {
-        //prepare to capture a TutorialRating Object
-        ArgumentCaptor<TutorialRating> tutorialRatingCaptor = ArgumentCaptor.forClass(TutorialRating.class);
+        //prepare to capture a Rating Object
+        ArgumentCaptor<Rating> tutorialRatingCaptor = ArgumentCaptor.forClass(Rating.class);
 
         //invoke createNew
         service.createNew(TUTORIAL_ID, USER_ID, 2, "ok");
 
-        //verify tutorialRatingRepository.save invoked once and capture the TutorialRating Object
+        //verify tutorialRatingRepository.save invoked once and capture the Rating Object
         verify(tRatingRepository).save(tutorialRatingCaptor.capture());
 
         //verify the attributes of the Tutorial Rating Object

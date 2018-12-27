@@ -1,4 +1,4 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +13,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.ust.tr.domain.Tutorial;
-import pl.ust.tr.domain.TutorialRating;
-import pl.ust.tr.service.TutorialRatingService;
+import pl.ust.tr.rating.Rating;
+import pl.ust.tr.rating.RatingDto;
+import pl.ust.tr.rating.RatingService;
+import pl.ust.tr.tutorial.Tutorial;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,10 +44,10 @@ public class RatingControllerTest {
     private static final String COMMENT = "comment";
 
     @MockBean
-    private TutorialRatingService tutorialRatingServiceMock;
+    private RatingService ratingServiceMock;
 
     @Mock
-    private TutorialRating tRating;
+    private Rating tRating;
 
     @Mock
     private Tutorial tutorial;
@@ -71,7 +72,7 @@ public class RatingControllerTest {
     @Test
     public void getRatings() {
 
-        when(tutorialRatingServiceMock.lookupAll()).thenReturn(Arrays.asList(tRating, tRating, tRating));
+        when(ratingServiceMock.lookupAll()).thenReturn(Arrays.asList(tRating, tRating, tRating));
 
         ResponseEntity<List<RatingDto>> response = restTemplate.exchange(RATINGS_URL,
                                                                         HttpMethod.GET,null,
@@ -87,7 +88,7 @@ public class RatingControllerTest {
     @Test
     public void getOne()  {
 
-        when(tutorialRatingServiceMock.lookupRatingById(RATING_ID)).thenReturn(Optional.of(tRating));
+        when(ratingServiceMock.lookupRatingById(RATING_ID)).thenReturn(Optional.of(tRating));
 
         ResponseEntity<RatingDto> response =
                 restTemplate.getForEntity(RATINGS_URL + "/" + RATING_ID, RatingDto.class);

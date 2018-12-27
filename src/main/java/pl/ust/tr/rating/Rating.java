@@ -1,4 +1,6 @@
-package pl.ust.tr.domain;
+package pl.ust.tr.rating;
+
+import pl.ust.tr.tutorial.Tutorial;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -6,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "TutorialRating")
-public class TutorialRating implements Serializable {
+public class Rating implements Serializable {
     //----------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,21 +28,21 @@ public class TutorialRating implements Serializable {
     @Column(length=255)
     private String comment;
 
-    public TutorialRating(Tutorial tutorial, Integer userId, Integer score, String comment) {
+    public Rating(Tutorial tutorial, Integer userId, Integer score, String comment) {
         this.tutorial = tutorial;
         this.userId = userId;
         this.score = score;
         this.comment = comment;
     }
 
-    public TutorialRating(Tutorial tutorial, Integer userId, Integer score) {
+    public Rating(Tutorial tutorial, Integer userId, Integer score) {
         this.tutorial = tutorial;
         this.userId = userId;
         this.score = score;
         this.comment = this.toComment(score);
     }
 
-    protected TutorialRating(){}
+    protected Rating(){}
 
     /**
      * Auto Generate a message for a score.
@@ -100,7 +102,7 @@ public class TutorialRating implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TutorialRating that = (TutorialRating) o;
+        Rating that = (Rating) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(tutorial, that.tutorial) &&
                 Objects.equals(userId, that.userId) &&
@@ -115,7 +117,7 @@ public class TutorialRating implements Serializable {
 
     @Override
     public String toString() {
-        return "TutorialRating{" +
+        return "Rating{" +
                 "id=" + id +
                 ", tutorial=" + tutorial +
                 ", userId=" + userId +

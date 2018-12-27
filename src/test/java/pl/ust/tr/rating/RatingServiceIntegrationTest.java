@@ -1,4 +1,4 @@
-package pl.ust.tr.service;
+package pl.ust.tr.rating;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import pl.ust.tr.domain.TutorialRating;
+import pl.ust.tr.rating.Rating;
+import pl.ust.tr.rating.RatingService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,20 +21,20 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class TutorialRatingServiceIntegrationTest {
+public class RatingServiceIntegrationTest {
     private static final int USER_ID = 456;
     private static final int TUTORIAL_ID = 1;
     private static final int NOT_EXISTING_TUTORIAL_ID = 123;
 
     @Autowired
-    private TutorialRatingService service;
+    private RatingService service;
 
-    //Happy Path delete existing TutorialRating.
+    //Happy Path delete existing Rating.
     @Test
     public void delete() {
-        List<TutorialRating> tutorialRatings = service.lookupAll();
-        service.delete(tutorialRatings.get(0).getTutorial().getId(), tutorialRatings.get(0).getUserId());
-        assertThat(service.lookupAll().size(), is(tutorialRatings.size() - 1));
+        List<Rating> ratings = service.lookupAll();
+        service.delete(ratings.get(0).getTutorial().getId(), ratings.get(0).getUserId());
+        assertThat(service.lookupAll().size(), is(ratings.size() - 1));
     }
 
     //UnHappy Path, Tutorial NOT_EXISTING_TUTORIAL_ID does not exist
@@ -46,15 +47,15 @@ public class TutorialRatingServiceIntegrationTest {
     //Happy Path to Create a new Tutorial Rating
     @Test
     public void createNew() {
-        //would throw NoSuchElementException if TutorialRating for TUTORIAL_ID by USER_ID already exists
+        //would throw NoSuchElementException if Rating for TUTORIAL_ID by USER_ID already exists
         service.createNew(TUTORIAL_ID, USER_ID, 2, "it was fair");
 
         //Verify New Tutorial Rating created.
-        TutorialRating newTutorialRating = service.verifyTutorialRating(TUTORIAL_ID, USER_ID);
-        assertThat(newTutorialRating.getTutorial().getId(), is(TUTORIAL_ID));
-        assertThat(newTutorialRating.getUserId(), is(USER_ID));
-        assertThat(newTutorialRating.getScore(), is(2));
-        assertThat(newTutorialRating.getComment(), is ("it was fair"));
+        Rating newRating = service.verifyTutorialRating(TUTORIAL_ID, USER_ID);
+        assertThat(newRating.getTutorial().getId(), is(TUTORIAL_ID));
+        assertThat(newRating.getUserId(), is(USER_ID));
+        assertThat(newRating.getScore(), is(2));
+        assertThat(newRating.getComment(), is ("it was fair"));
     }
 
     //UnHappy Path, Tutorial NOT_EXISTING_TUTORIAL_ID does not exist
@@ -84,11 +85,11 @@ public class TutorialRatingServiceIntegrationTest {
     @Test
     public void update() {
         createNew();
-        TutorialRating tutorialRating = service.update(TUTORIAL_ID, USER_ID, 1, "one");
-        assertThat(tutorialRating.getTutorial().getId(), is(TUTORIAL_ID));
-        assertThat(tutorialRating.getUserId(), is(USER_ID));
-        assertThat(tutorialRating.getScore(), is(1));
-        assertThat(tutorialRating.getComment(), is("one"));
+        Rating rating = service.update(TUTORIAL_ID, USER_ID, 1, "one");
+        assertThat(rating.getTutorial().getId(), is(TUTORIAL_ID));
+        assertThat(rating.getUserId(), is(USER_ID));
+        assertThat(rating.getScore(), is(1));
+        assertThat(rating.getComment(), is("one"));
     }
 
     //Unhappy path, no Tutorial Rating exists for tutorialId=1 and customer=1
@@ -101,11 +102,11 @@ public class TutorialRatingServiceIntegrationTest {
     @Test
     public void updateSome() {
         createNew();
-        TutorialRating tutorialRating = service.update(TUTORIAL_ID, USER_ID, 1, "one");
-        assertThat(tutorialRating.getTutorial().getId(), is(TUTORIAL_ID));
-        assertThat(tutorialRating.getUserId(), is(USER_ID));
-        assertThat(tutorialRating.getScore(), is(1));
-        assertThat(tutorialRating.getComment(), is("one"));
+        Rating rating = service.update(TUTORIAL_ID, USER_ID, 1, "one");
+        assertThat(rating.getTutorial().getId(), is(TUTORIAL_ID));
+        assertThat(rating.getUserId(), is(USER_ID));
+        assertThat(rating.getScore(), is(1));
+        assertThat(rating.getComment(), is("one"));
     }
 
     //Unhappy path, no Tutorial Rating exists for tutorialId=1 and customer=1

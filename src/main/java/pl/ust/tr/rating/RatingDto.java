@@ -1,4 +1,4 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import org.springframework.hateoas.ResourceSupport;
 

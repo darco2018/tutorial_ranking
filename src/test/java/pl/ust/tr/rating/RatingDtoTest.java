@@ -1,6 +1,7 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import org.junit.Test;
+import pl.ust.tr.rating.RatingDto;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;

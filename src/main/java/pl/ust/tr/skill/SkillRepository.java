@@ -1,8 +1,8 @@
-package pl.ust.tr.repository;
+package pl.ust.tr.skill;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import pl.ust.tr.domain.Skill;
+import pl.ust.tr.skill.Skill;
 
 import java.util.Optional;
 

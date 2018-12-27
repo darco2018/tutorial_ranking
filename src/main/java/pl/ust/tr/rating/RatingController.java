@@ -1,4 +1,4 @@
-package pl.ust.tr.controller;
+package pl.ust.tr.rating;
 
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.ust.tr.service.TutorialRatingService;
 
 
 import java.util.List;
@@ -19,12 +18,12 @@ import java.util.NoSuchElementException;
 public class RatingController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RatingController.class);
 
-    private TutorialRatingService tutorialRatingService;
+    private RatingService ratingService;
     private RatingAssembler assembler;
 
     @Autowired
-    public RatingController(TutorialRatingService tutorialRatingService, RatingAssembler assembler) {
-        this.tutorialRatingService = tutorialRatingService;
+    public RatingController(RatingService ratingService, RatingAssembler assembler) {
+        this.ratingService = ratingService;
         this.assembler = assembler;
     }
 
@@ -33,7 +32,7 @@ public class RatingController {
     @ApiResponses(@ApiResponse(code = 200, message = "OK"))
     public List<RatingDto> getAll() {
         LOGGER.info("GET /ratings");
-        return assembler.toResources(tutorialRatingService.lookupAll());
+        return assembler.toResources(ratingService.lookupAll());
     }
 
     @GetMapping("/{id}")
@@ -43,7 +42,7 @@ public class RatingController {
                                 @PathVariable("id") Integer id) {
 
         LOGGER.info("GET /ratings/{id}", id);
-        return assembler.toResource(tutorialRatingService.lookupRatingById(id)
+        return assembler.toResource(ratingService.lookupRatingById(id)
                 .orElseThrow(() -> new NoSuchElementException("Rating " + id + " not found"))
         );
     }
