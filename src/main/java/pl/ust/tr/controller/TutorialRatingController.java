@@ -1,5 +1,7 @@
 package pl.ust.tr.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/tutorials/{tutorialId}/ratings")
 public class TutorialRatingController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TutorialRatingController.class);
 
     private TutorialRatingService tutorialRatingService;
     private RatingAssembler ratingAssembler;
@@ -37,7 +40,7 @@ public class TutorialRatingController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createTutorialRating(@PathVariable(value = "tutorialId") int tutorialId,
                                      @RequestBody @Validated RatingDto ratingDto){
-
+        LOGGER.info("POST /tours/{}/ratings", tutorialId);
         tutorialRatingService.createNew(tutorialId, ratingDto.getUserId(),ratingDto.getScore(), ratingDto.getComment());
 
     }
@@ -47,6 +50,7 @@ public class TutorialRatingController {
                                                                                 Pageable pageable,
                                                                                 PagedResourcesAssembler pagedAssembler){
                                                                                 // generate HATEOUS links for previous, next, last, etc.
+        LOGGER.info("GET /tours/{}/ratings", tutorialId);
         Page<TutorialRating> page = tutorialRatingService.lookupRatings(tutorialId, pageable);
         return pagedAssembler.toResource(page, ratingAssembler);
 
@@ -62,13 +66,15 @@ public class TutorialRatingController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/average")
     public AbstractMap.SimpleEntry<String, Double> getAverageRating(@PathVariable(value = "tutorialId") int tutorialId){
+
+        LOGGER.info("GET /tours/{}/ratings/average", tutorialId);
         return new AbstractMap.SimpleEntry<>("average", tutorialRatingService.getAverageScore(tutorialId));
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     public RatingDto updateWithPut(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
-
+        LOGGER.info("PUT /tours/{}/ratings", tutorialId);
         return toDto(tutorialRatingService.update(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
                 ratingDto.getComment()));
 
@@ -77,7 +83,7 @@ public class TutorialRatingController {
     @RequestMapping(method = RequestMethod.PATCH)
     public RatingDto updateWithPatch(@PathVariable (value = "tutorialId") int tutorialId,
                                    @RequestBody @Validated RatingDto ratingDto){
-
+        LOGGER.info("PATCH /tours/{}/ratings", tutorialId);
         return toDto(tutorialRatingService.updateSome(tutorialId, ratingDto.getUserId(), ratingDto.getScore(),
                 ratingDto.getComment()));
     }
@@ -85,7 +91,7 @@ public class TutorialRatingController {
     @RequestMapping(method = RequestMethod.DELETE, path = "/{userId}")
     public void delete(@PathVariable (value = "tutorialId") int tutorialId,
                        @PathVariable (value = "userId") int userId){
-
+        LOGGER.info("DELETE /tours/{}/ratings/{}", tutorialId, userId);
         tutorialRatingService.delete(tutorialId, userId);
     }
 
