@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 
-source ./scripts/config.sh
+source ./scripts/docker-config.sh
 
-echo "Starting the database container..."
-docker run -d  --name  ${db_container_name} \
+echo "Starting the database container... Reading MYSQL env variables from file..."
+docker run -d  --name  ${db_container} \
     -p 6604:3306 \
-    --env="MYSQL_ROOT_PASSWORD=${dbroot_pass}" \
-    --env="MYSQL_PASSWORD=${dbpass}" \
-    --env="MYSQL_USER=${dbuser}" \
-    --env="MYSQL_DATABASE=${database}" \
-    mysql
+    --env-file=docker/docker_env \
+    ${db_image}
 
-echo "Fetching logs from the database container..."
-docker logs ${db_container_name}
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Fetching logs from the database container..."
+docker logs ${db_container}
 
-echo "Inspecting the database container..."
-docker inspect ${db_container_name}
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Inspecting the database container..."
+docker inspect ${db_container}
 
-#docker exec -it db_container_name bash
+#docker exec -it db_container bash
 #mysql -u tut_user -ptut_pass
 #show databases;
 

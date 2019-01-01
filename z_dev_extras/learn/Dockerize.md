@@ -1,3 +1,7 @@
+docker history --no-trunc  tutorialpedia:latest
+docker inspect <containerid>
+docker tag spring-boot-app   baeldung/spring-boot-app:.0.0.1
+
 ###----------------- DOCKERIZE DB ------------------
 Start MYSQL DB:
 ######./scripts/db-up.sh  &  ./scripts/db-down.sh

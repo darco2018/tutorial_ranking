@@ -1,0 +1,7 @@
+MYSQL_SERVER=tut-mysql
+MYSQL_PORT=3306
+MYSQL_DATABASE=tutorialpedia
+MYSQL_USER=tut_pass
+MYSQL_PASSWORD=tut_user
+MYSQL_ROOT_PASSWORD=password
+

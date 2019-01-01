@@ -1,16 +1,22 @@
 FROM openjdk:8-jre-alpine
-#RUN apk add --no-cache bash
+RUN apk add bash
 
-ARG APP_DIR=/usr/src/tutorialpedia
-RUN mkdir -p ${APP_DIR}
-#COPY . ${APP_DIR}
-WORKDIR ${APP_DIR}
+ARG app_dir="/usr/src/app"
+RUN mkdir -p ${app_dir}
+WORKDIR ${app_dir}
 
-VOLUME /tmp
-COPY ./src/main/resources/logback.xml /logback.xml
+ARG log_config="./logback.xml"
+ENV container_log_confir  "/logback.xml"
+COPY  ${log_config} ${container_log_confir}
 
-ENV JAR_NAME  tutorialpedia-0.0.1.jar
-ADD docker/*.jar   ${JAR_NAME}
+ARG jar_name
+#ARG wont be visible at ENTRYPOINT/CMD
+ENV APP_JAR  ${jar_name}
+ADD docker/*.jar   ${APP_JAR}
+
 EXPOSE 8080
-#ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=mysql", "/tutorial_ranking-0.0.1-SNAPSHOT.jar"]
-CMD  java  -jar  -Dspring.profiles.active=mysql  "-Dlogging.config=/logback.xml"  ${JAR_NAME}
+VOLUME /tmp
+
+#when splitting "java -jar ${JAR}" it stops working
+ENTRYPOINT ["/bin/bash", "-c", "java -jar ${APP_JAR}"]
+CMD  ["-Dspring.profiles.active=mysql", "-Dlogging.config=${container_log_confir}" ]

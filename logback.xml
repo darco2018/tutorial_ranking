@@ -8,7 +8,7 @@
     <logger name="pl.ust.tr" level="DEBUG"></logger>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/var/log/tutorial-app/application.log</file>
+        <file>/var/log/tutorialpedia/application.log</file>
         <append>true</append>
         <encoder>
             <pattern>%-7d{MM-dd HH:mm:ss:SSS} %m%n</pattern>
