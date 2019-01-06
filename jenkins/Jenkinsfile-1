@@ -1,0 +1,31 @@
+// remember to commit JEnkinsfile or Jenkins won't see it!
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.6.0-jdk-8-alpine'
+            args '-v /root/.m2:/root/.m2' // maven image sets USER_HOME to /root
+        }
+    }
+    stages {
+        stage('Build: -DskipTests clean package') {
+            steps {
+                sh 'mvn -B -DskipTests clean package'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh './jenkins/deliver.sh'
+            }
+        }
+    }
+}
