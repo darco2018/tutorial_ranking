@@ -30,7 +30,7 @@ pipeline {
         steps {
             echo 'Preparation...'
             deleteDir()
-            checkout([$class      : 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
                       submoduleCfg: [], userRemoteConfigs: [[url: 'ustrd@172.17.0.1:IdeaProjects/tutorial_ranking']]])
             sh 'printenv'
         }
@@ -49,6 +49,7 @@ pipeline {
                 )
             }
         }
+
     }
 }
 
@@ -117,4 +118,3 @@ pipeline {
         }
     }
     */
-
