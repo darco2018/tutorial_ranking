@@ -1,120 +1,88 @@
 pipeline {
+    // Blocks must only consist of Sections, Directives, Steps, or assignment statements
+    //Sections contain one or more Directives or Steps.
+    agent any
+    //options { skipDefaultCheckout() }
 
-    options { skipDefaultCheckout() }
+    environment{
+        /*NOTES:
+        lo_var="lowercaseOK" can be called ${LO_VAR}
+        black var is interpolated, green is a string
+        app_jar='${env.app_name}' - singel quotes dont interpolate variables!!!*/
 
-    agent {
+        app_name="tutorialpedia"
+        version="0.0.1"
+        app_jar="${env.app_name}-${env.version}"
+        serverport=9999
+        app_image="${env.app_name}"
+        app_container="tut-app"
+        db_image="mysql"
+        db_container="tut-mysql"
 
-        docker {
-            image 'maven:3.6.0-jdk-8-alpine'
-            args '--rm  -v /root/.m2:/root/.m2 -p 8080:8080'
-        }
-/*
-        dockerfile {
-            filename 'Dockerfile.build'
-            dir 'build'
-            customWorkspace '/some/other/path'
-            label 'my-defined-label'
-            additionalBuildArgs  '--build-arg version=1.0.2'
-            args '-v /tmp:/tmp'
-            registryUrl 'https://myregistry.com/'
-            registryCredentialsId 'myPredefinedCredentialsInJenkins'
-        }*/
-    }
-    // withEnv
-    environment {
-        LOG_ABS_PATH = '/var/log/'
-        MIGRATION_ABS_PATH = '/var/migration/'
-    }
-
-    stage('Preparation') {
-        steps {
-            echo 'Preparation...'
-            deleteDir()
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [],
-                      submoduleCfg: [], userRemoteConfigs: [[url: 'ustrd@172.17.0.1:IdeaProjects/tutorial_ranking']]])
-            sh 'printenv'
-        }
     }
 
     stages {
-        stage('run-parallel-branches') {
+        stage('Install docker dependency') {
             steps {
-                parallel(
-                        a: {
-                            echo "Tests on Linux"
-                        },
-                        b: {
-                            echo "Tests on Windows"
-                        }
-                )
+                script {
+                    def dockerTool = tool name: 'myDocker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+                    withEnv(["DOCKER=${dockerTool}/bin"]) {
+                        //stages
+                    }
+                }
+                //for testing purposes (each sh has its own interpreter - you start afresh each time
+                echo 'Careful with variables:'
+                //sh '$PWD' // interpolated by Shell :  /var/jenkins_home/workspace/ia_d-06-poll-scm-push-hub_master  Permission denied
+                //sh "$PWD" // interpolated in this file  by Groovy:  / Permission denied
+                sh 'docker images'
+                sh 'printenv'
+
             }
         }
 
-    }
-}
+        stage('Build image') {
+            steps {
+                script {
+                    // CAREFUL: I commented off ADD docker/*jar w Dockerfile
+                    myImg = docker.build("my-image-name", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
+                    myImg.inside("--entrypoint=''"){ // turns off Dockerfile entrypoint
+                        sh 'ls -al'
+                        sh "echo ${app_jar} is app_jar ....." //
+                        sh "echo ${APP_JAR} is APP_JAR ....."
+                    }
 
-/*
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                //echo 'Database must be up...' ??!!
-                //sh './scripts/run.sh'
-                sh 'mvn -B -DskipTests clean package' // -B run in nRun in non-interactive (batch) mode (disables output color)
-            }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                    // nie pownien image jako artifact byc ?!
-                    archiveArtifacts 'docker/*jar'
                 }
             }
         }
-        //place more complex build steps (particularly for stages consisting of 2 or more steps) into separate shell script files like the deliver.sh file.
-        stage('Deliver - Staging') {
+
+
+        stage('Connect to dockerhub') {
             steps {
-                echo 'Deliver - Staging...'
-                echo 'Running mvn install - putting JAR to Jenkins local Maven repo...'
-                echo 'Extracting the JARs name...'
-                echo 'Runing the JAR http://localhost:8080/  ?!...'
 
-
-                sh './jenkins/deliver.sh'
-
-
-
-                //input message: 'Finished using the web site? (Click "Proceed" to continue)'
-
-                //sh 'sleep 30' not working - app still running
-                //sh 'curl -X POST localhost:8080/actuator/shutdown'
-                //sh './deploy staging'
-                //sh './run-smoke-tests'
+                // This step should not normally be used in your script. Consult the inline help for details.
+                // docker.withRegistry(url[, credentialsId]) {…} >> https://index.docker.io/v1/
+                // toolName i url moga byc ominiete
+                // Docker Pipeline & Docker Commons Plugin
+                withDockerRegistry(credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/') {
+                    // some block
+                }
             }
+
+            // There are many features of the Pipeline that are not steps. These are often exposed via global variables,
+            // which are not supported by the snippet generator.
+
         }
 
-        stage('Release ?!') {
-            steps {
-                echo 'Releasing...'
-
-            }
-        }
-
-        stage('Sanity check') {
-            steps {
-                echo 'Sanity check...'
-                //input "Does the staging environment look ok?"
-            }
-        }
-
-        stage('Deploy - Production') {
-            steps {
-                echo 'Deploy - Staging...'
-                //sh './deploy production'
-            }
-        }
     }
-    */
+
+
+}
+
+
+/*
+
+They dont load the variables into Dockerfile or Jenkins environment:
+readFile 'scripts/docker-config.sh'
+load './scripts/docker-config.groovy'
+sh 'source scripts/docker-config.sh'
+*/

@@ -13,7 +13,7 @@ ARG jar_name
 #ARG wont be visible at ENTRYPOINT/CMD
 ENV APP_JAR  ${jar_name}
 # ADD, unlike COPY, can be used to use a URL (eg git repo)
-ADD docker/*.jar   ${APP_JAR}
+# ADD docker/*.jar   ${APP_JAR}
 
 EXPOSE 8080
 VOLUME /tmp
