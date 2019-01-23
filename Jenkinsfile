@@ -22,6 +22,10 @@ pipeline {
 
     }
 
+    tools {
+        maven 'M3'
+    }
+
     stages {
         stage('Install docker dependency') {
             steps {
@@ -50,30 +54,39 @@ pipeline {
             }
         }
 
-        stage('Start the database') {
-            steps {
-                sh 'scripts/db-up.sh'
-            }
-        }
 
-        stage('Package the app (using Maven in Jenkins') {
+        stage('Build JAR - skip tests (using Maven in Jenkins') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
 
-
-        stage('Build image') {
+        stage('Build app image') {
             steps {
                 script {
-                    // CAREFUL: I commented off ADD docker/*jar w Dockerfile
-                    myImg = docker.build("my-image-name", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
+
+                    myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
+                    /*
                     myImg.inside("--entrypoint=''"){ // turns off Dockerfile entrypoint
                         sh 'ls -al'
                         sh "echo ${app_jar} is app_jar ....." //
                         sh "echo ${APP_JAR} is APP_JAR ....."
                     }
+                    */
 
+                }
+            }
+        }
+
+        stage('Run the app') {
+            steps {
+                script {
+                    try {  // database tez powinna byc z custom Dockerfile: ustrd/mysql
+                        sh 'scripts/db-up.sh'
+                    } catch (error) {
+                    } finally {
+                        sh 'scripts/db-down.sh'
+                    }
                 }
             }
         }
