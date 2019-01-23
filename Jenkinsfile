@@ -5,7 +5,7 @@ pipeline {
 
     options { skipDefaultCheckout()
         // buildlogs, artifacts
-        buildDescarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
 
     }
 
@@ -85,6 +85,11 @@ pipeline {
                 }
             }
             */
+            stage('Sonar') {
+                steps {
+                    sh "mvn sonar:sonar -Dsonar.host.url=${env.SONARQUBE_HOST}"
+                }
+            }
         }
 
 
