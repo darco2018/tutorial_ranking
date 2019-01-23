@@ -3,7 +3,11 @@ pipeline {
     //Sections contain one or more Directives or Steps.
     agent any
 
-    options { skipDefaultCheckout() }
+    options { skipDefaultCheckout()
+        // buildlogs, artifacts
+        buildDescarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+
+    }
 
     environment{
         /*NOTES:
