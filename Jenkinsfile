@@ -2,7 +2,8 @@ pipeline {
     // Blocks must only consist of Sections, Directives, Steps, or assignment statements
     //Sections contain one or more Directives or Steps.
     agent any
-    //options { skipDefaultCheckout() }
+
+    options { skipDefaultCheckout() }
 
     environment{
         /*NOTES:
@@ -39,6 +40,18 @@ pipeline {
 
             }
         }
+
+        stage('Checkout github') {
+            steps {
+                deleteDir()
+                //checkout scm
+                git credentialsId: 'jenkins-webhook-id', url: 'https://github.com/darco2018/tutorial_ranking'
+
+            }
+        }
+
+
+
 
         stage('Build image') {
             steps {
