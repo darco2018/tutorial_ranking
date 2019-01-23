@@ -11,14 +11,17 @@ pipeline {
         black var is interpolated, green is a string
         app_jar='${env.app_name}' - singel quotes dont interpolate variables!!!*/
 
-        app_name="tutorialpedia"
+        app_name="kroliczek"
         version="0.0.1"
         app_jar="${env.app_name}-${env.version}"
         serverport=9999
         app_image="${env.app_name}"
-        app_container="tut-app"
+        app_container="${env.app_name}"
         db_image="mysql"
         db_container="tut-mysql"
+
+        LOG_ABS_PATH="/var/log/"
+        MIGRATION_ABS_PATH="/var/migration/"
 
     }
 
@@ -29,6 +32,8 @@ pipeline {
     stages {
         stage('Install docker dependency') {
             steps {
+                sh 'java -version'
+                sh 'which java'
                 script {
                     def dockerTool = tool name: 'myDocker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
                     withEnv(["DOCKER=${dockerTool}/bin"]) {
@@ -64,8 +69,10 @@ pipeline {
         // if tests fail, no the point of building image later
         stage('Run unit tests (using Maven in Jenkins') {
             steps {
-                sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
+                echo 'Tests commented off'
+                //sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
             }
+            /*
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
@@ -73,6 +80,7 @@ pipeline {
                     archiveArtifacts 'docker/*jar'
                 }
             }
+            */
         }
 
 
@@ -99,16 +107,20 @@ pipeline {
                 script {
                     try {  // database tez powinna byc z custom Dockerfile: ustrd/mysql
                         sh 'scripts/db-up.sh'
+                        sh 'scripts/run-app-image.sh'
+                        //sleep 15
                     } catch (error) {
-                    } finally {
-                        sh 'scripts/db-down.sh'
+                        error.printStackTrace()
                     }
                 }
+
+                //debugging
+                sh 'docker ps -a'
             }
         }
 
 
-        stage('Connect to dockerhub') {
+        stage('Push image') {
             steps {
 
                 // This step should not normally be used in your script. Consult the inline help for details.
@@ -121,6 +133,10 @@ pipeline {
                 }
 */               script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER",
+                                "-f ./docker/Dockerfile " +
+                                "--build-arg SOMEVAR=dummyvalue . ")
+                                .push()
 
                     }
                 }
@@ -133,6 +149,15 @@ pipeline {
 
     }
 
+    post {
+        always{
+            sh 'scripts/db-down.sh'
+            retry(20) {
+                sh 'curl -X POST http://172.17.0.1:9999/actuator/shutdown'
+            }
+
+        }
+    }
 
 }
 

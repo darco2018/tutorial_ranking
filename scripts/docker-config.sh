@@ -11,7 +11,7 @@ serverport=9999
 
 # image & container
 app_image=${app_name}
-app_container="tut-app"
+app_container=${app_name}
 db_image="mysql"
 db_container="tut-mysql"
 
