@@ -54,18 +54,34 @@ pipeline {
             }
         }
 
-
+        // if app doesnt even build no point of testing later(long process)
         stage('Build JAR - skip tests (using Maven in Jenkins') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
 
-        stage('Build app image') {
+        // if tests fail, no the point of building image later
+        stage('Run unit tests (using Maven in Jenkins') {
+            steps {
+                sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                    // nie pownien image jako artifact byc ?!
+                    archiveArtifacts 'docker/*jar'
+                }
+            }
+        }
+
+
+        stage('Build app image: tutorialpedia:latest') {
             steps {
                 script {
 
-                    myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
+                    //it also works: myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
+                    sh 'scripts/build-app-image.sh'
                     /*
                     myImg.inside("--entrypoint=''"){ // turns off Dockerfile entrypoint
                         sh 'ls -al'
