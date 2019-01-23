@@ -56,7 +56,11 @@ pipeline {
             }
         }
 
-
+        stage('Package the app (using Maven in Jenkins') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
 
 
         stage('Build image') {
