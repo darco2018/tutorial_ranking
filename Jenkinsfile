@@ -44,9 +44,15 @@ pipeline {
         stage('Checkout github') {
             steps {
                 deleteDir()
-                //checkout scm
-                git credentialsId: 'jenkins-webhook-id', url: 'https://github.com/darco2018/tutorial_ranking'
+                //ALTENATIVE: checkout scm
+                git branch: 'master', credentialsId: 'jenkins-webhook-id', url: 'https://github.com/darco2018/tutorial_ranking'
 
+            }
+        }
+
+        stage('Start the database') {
+            steps {
+                sh 'scripts/db-up.sh'
             }
         }
 
@@ -76,8 +82,14 @@ pipeline {
                 // docker.withRegistry(url[, credentialsId]) {…} >> https://index.docker.io/v1/
                 // toolName i url moga byc ominiete
                 // Docker Pipeline & Docker Commons Plugin
+                /* ALTERNATIVE - not in script step)
                 withDockerRegistry(credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/') {
                     // some block
+                }
+*/               script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+
+                    }
                 }
             }
 
