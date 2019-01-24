@@ -74,22 +74,18 @@ pipeline {
         stage('Run unit tests (using Maven in Jenkins') {
             steps {
                 echo 'Tests commented off'
-                //sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
+                sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
+                sh "mvn sonar:sonar -Dsonar.host.url=${env.SONARQUBE_HOST}"
             }
-            /*
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
                     // nie pownien image jako artifact byc ?!
                     archiveArtifacts 'docker/*jar'
+
                 }
             }
-            */
-            stage('Sonar') {
-                steps {
-                    sh "mvn sonar:sonar -Dsonar.host.url=${env.SONARQUBE_HOST}"
-                }
-            }
+
         }
 
 
