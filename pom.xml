@@ -99,6 +99,7 @@
                 </configuration>
                 <!--2.21.0 causes crashes in Jenkins-->
 
+                <version>2.20.0</version>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
