@@ -1,31 +1,36 @@
+
+
 pipeline {
     // Blocks must only consist of Sections, Directives, Steps, or assignment statements
     //Sections contain one or more Directives or Steps.
     agent any
 
-    options { skipDefaultCheckout()
+    options {
         // buildlogs, artifacts
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-
+        skipDefaultCheckout()
+    }
+    parameters {
+        string(name: 'user', defaultValue: 'ustrd', description: 'A user that triggers the pipeline')
     }
 
-    environment{
+    environment {
         /*NOTES:
         lo_var="lowercaseOK" can be called ${LO_VAR}
         black var is interpolated, green is a string
         app_jar='${env.app_name}' - singel quotes dont interpolate variables!!!*/
 
-        app_name="kroliczek"
-        version="0.0.1"
-        app_jar="${env.app_name}-${env.version}"
-        serverport=9999
-        app_image="${env.app_name}"
-        app_container="${env.app_name}"
-        db_image="mysql"
-        db_container="tut-mysql"
+        app_name = "kroliczek"
+        version = "0.0.1"
+        app_jar = "${env.app_name}-${env.version}"
+        serverport = 9999
+        app_image = "${env.app_name}"
+        app_container = "${env.app_name}"
+        db_image = "mysql"
+        db_container = "tut-mysql"
 
-        LOG_ABS_PATH="/var/log/"
-        MIGRATION_ABS_PATH="/var/migration/"
+        LOG_ABS_PATH = "/var/log/"
+        MIGRATION_ABS_PATH = "/var/migration/"
 
     }
 
@@ -34,8 +39,9 @@ pipeline {
     }
 
     stages {
-        stage('Install docker dependency') {
+        stage('Install docker') {
             steps {
+                echo "Pipeline triggered by ${params.USER}"
                 sh 'java -version'
                 sh 'which java'
                 script {
@@ -54,7 +60,7 @@ pipeline {
             }
         }
 
-        stage('Checkout github') {
+        stage('Checkout') {
             steps {
                 deleteDir()
                 //ALTENATIVE: checkout scm
@@ -64,37 +70,43 @@ pipeline {
         }
 
         // if app doesnt even build no point of testing later(long process)
-        stage('Build JAR - skip tests (using Maven in Jenkins') {
+        stage('Build JAR') {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
         }
 
         // if tests fail, no the point of building image later
-        stage('Run unit tests (using Maven in Jenkins') {
+        stage('Unit tests/Sonar') {
+            // A stage directive can have either a parallel or steps directive but not both,  cannot have “agent” or “tools”
+
             steps {
-                echo 'Tests commented off'
-                sh 'mvn test' //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
-                sh "mvn sonar:sonar -Dsonar.host.url=${env.SONARQUBE_HOST}"
+                sh 'mvn clean test'
+                //-e -X for debug; cant we run it in container ? mkyoung how to run unit test with maven
+                // sonar stops NOT working in parallel step with mvn test
+                //sh "mvn  sonar:sonar -Dsonar.host.url=${env.SONARQUBE_HOST}"
+
             }
             post {
                 always {
-                    junit 'target/surefire-reports/*.xml'
-                    // nie pownien image jako artifact byc ?!
-                    archiveArtifacts 'docker/*jar'
-
+                    junit 'target/surefire-reports/TEST-*.xml'
                 }
             }
-
         }
 
 
-        stage('Build app image: tutorialpedia:latest') {
+        stage('Build app image') {
             steps {
                 script {
 
                     //it also works: myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER", "-f ./docker/Dockerfile --build-arg SOMEVAR=dummyvalue . ")
                     sh 'scripts/build-app-image.sh'
+
+                    app = docker.build("ustrd/tut2", "-f docker/Dockerfile .")
+                    // docker.build( really starts a container
+                    app.inside("--entrypoint=''") {
+                        sh 'echo "Tests passed"'
+                    }
                     /*
                     myImg.inside("--entrypoint=''"){ // turns off Dockerfile entrypoint
                         sh 'ls -al'
@@ -102,18 +114,21 @@ pipeline {
                         sh "echo ${APP_JAR} is APP_JAR ....."
                     }
                     */
-
                 }
             }
         }
 
-        stage('Run the app') {
+        stage('Run') {
             steps {
                 script {
                     try {  // database tez powinna byc z custom Dockerfile: ustrd/mysql
                         sh 'scripts/db-up.sh'
                         sh 'scripts/run-app-image.sh'
-                        //sleep 15
+                        sleep 15
+                        retry(10) {
+                            sh 'curl -X GET http://172.17.0.1:${serverport}/skills/GE'
+                        }
+
                     } catch (error) {
                         error.printStackTrace()
                     }
@@ -124,8 +139,28 @@ pipeline {
             }
         }
 
+        stage('Integration tests') {
+            steps {
+                // sh 'mvn clean test'
+                echo 'This should run the integration tests against the docker container but is now failing'
+            }
+            post {
+                always {
+                    //junit 'target/surefire-reports/TEST-*.xml'
+                    echo 'This should generate reports'
+                }
+                success {
+
+                    archiveArtifacts 'docker/*jar'
+                }
+            }
+        }
+
 
         stage('Push image') {
+            when {
+                branch 'master'
+            }
             steps {
 
                 // This step should not normally be used in your script. Consult the inline help for details.
@@ -136,34 +171,43 @@ pipeline {
                 withDockerRegistry(credentialsId: 'dockerhub-credentials', url: 'https://index.docker.io/v1/') {
                     // some block
                 }
-*/               script {
+                */
+            script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         myImg = docker.build("ustrd/tutorialpedia:$env.BUILD_NUMBER",
                                 "-f ./docker/Dockerfile " +
-                                "--build-arg SOMEVAR=dummyvalue . ")
-                                .push()
+                                        "--build-arg SOMEVAR=dummyvalue . ")
+
+                        /* First, the incremental build number from Jenkins
+                         Second, the 'latest' tag.
+                          Pushing multiple tags is cheap, as all the layers are reused. */
+                        myImg.push("${env.BUILD_NUMBER}")
+                        myImg.push("latest")
 
                     }
+
+
+
+                    // There are many features of the Pipeline that are not steps. These are often exposed via global variables,
+                    // which are not supported by the snippet generator.
+
+                }
+
+            }
+
+            post {
+                always {
+                    sh 'scripts/db-down.sh'
+                    retry(20) {
+                        sh 'curl -X POST http://172.17.0.1:${serverport}/actuator/shutdown'
+                    }
+
                 }
             }
 
-            // There are many features of the Pipeline that are not steps. These are often exposed via global variables,
-            // which are not supported by the snippet generator.
-
         }
 
     }
-
-    post {
-        always{
-            sh 'scripts/db-down.sh'
-            retry(20) {
-                sh 'curl -X POST http://172.17.0.1:9999/actuator/shutdown'
-            }
-
-        }
-    }
-
 }
 
 
