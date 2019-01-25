@@ -1,3 +1,15 @@
-FROM maven:3.6.0-jdk-8-alpine
-RUN apk add bash
-ENTRYPOINT ["/bin/bash", "mvn", "-version"]
+# docker build --no-cache -t my-image:1 -f ./Dockerfile-mvn  .
+# docker run -it --rm  -v "$HOME/.m2":/root/.m2  my-image:1 /bin/sh
+# -mvn X -e >> debug  -ff > fail fast   -Dmaven.test.skip=true > not compile, not run tests
+
+FROM maven:3.6.0-jdk-8
+COPY ./.  /app
+WORKDIR /app
+
+
+
+#COPY wait-for-it.sh /usr/bin
+#RUN chmod +x /usr/bin/wait-for-it.sh
+#COPY pom.xml /tmp/
+#COPY src /tmp/src/
+#WORKDIR /tmp/cd ID
