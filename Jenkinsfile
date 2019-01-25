@@ -124,7 +124,7 @@ pipeline {
                     try {  // database tez powinna byc z custom Dockerfile: ustrd/mysql
                         sh 'scripts/db-up.sh'
                         sh 'scripts/run-app-image.sh'
-                        sleep 15
+                        sleep 20
                         retry(10) {
                             sh 'curl -X GET http://172.17.0.1:${serverport}/skills/GE'
                         }
