@@ -98,7 +98,7 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
                 <!--2.21.0 causes crashes in Jenkins-->
-                <version>2.21.0</version>
+
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
