@@ -91,15 +91,30 @@
     <build>
         <plugins>
             <plugin>
+<!--
+                Surefire manifest jar classloading broken on latest Debian/Ubuntu Java8
+-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+
+                <!--2.21.0 , causes crashes in Jenkins, 2.22.0 crashes in docker-->
+
+                <!--FOR Dockerfile-mvn-builder Surefire normally automatically selects which test-framework provider to use based on the version of TestNG/JUnit present
+                in your project's classpath. In some cases it may be desirable to manually override such a selection.
+                This can be done by adding the required provider as a dependency to the surefire-plugin.-->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit4</artifactId>
+                        <version>2.21.0</version>
+                    </dependency>
+                </dependencies>
+
                 <configuration>
+
                     <!-- necessary to avoid crashes in mvn running in docker-->
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
-                <!--2.21.0 causes crashes in Jenkins-->
-
-                <version>2.20.0</version>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -116,7 +131,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.7.201606060606</version>
@@ -134,7 +149,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
