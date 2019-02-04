@@ -1,0 +1,21 @@
+# docker build -f ./docker/Dockerfile-mvn-run -t ustrd/mvn-run  --cache-from ustrd/mvn-run:latest  .
+# cache > download < first time is longer
+# docker run -it -p 1234:8080 ustrd/mvn-run
+# OPTIMIZES BUILT TIME (dependencies loaded only when pom changes; instead you can bind mount .m2)
+FROM maven:3.6.0-jdk-8-alpine
+
+EXPOSE 8080
+WORKDIR "/usr/src/app"
+
+# build all dependencies for offline use
+COPY ./pom.xml ./pom.xml
+RUN mvn dependency:go-offline -B
+
+# copy your other files
+COPY ./src ./src
+
+# run tests, build for release.
+RUN mvn package
+
+# set the startup command
+CMD java -jar docker/*.jar
