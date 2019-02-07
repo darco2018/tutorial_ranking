@@ -1,0 +1,45 @@
+FROM openjdk:8-jdk-alpine
+# openjdk:8-jdk-alpine  apk >> ALpine  apt-get >> Debian
+RUN apk update && apk add bash
+
+ARG app_dir="/usr/src/app"
+RUN mkdir -p ${app_dir}
+WORKDIR ${app_dir}
+
+
+ARG log_config="./logback.xml"
+ENV container_log_config  "/logback.xml"
+COPY  ${log_config} ${container_log_config}
+
+ARG jar_name
+#ARG wont be visible at ENTRYPOINT/CMD
+ENV APP_JAR  ${jar_name}
+# ADD, unlike COPY, can be used to use a URL (eg git repo)
+ADD docker/*.jar   ${APP_JAR}
+
+EXPOSE 8080
+VOLUME /tmp
+
+# when bash as executable, shell can do variable substitution
+# -c means that bash should NOT expect a text file with shell commands
+# when splitting "java -jar ${JAR}" it stops working
+ENTRYPOINT ["/bin/bash", "-c", "java -jar ${APP_JAR}"]
+# I can overwrite these with run instruction:
+CMD  ["-Dspring.profiles.active=mysql", "-Dlogging.config=${container_log_config}" ]
+
+
+
+# Nie zrobi variable substitution w exec form, bo nie ma tu shell'a, a docker tego nie robi:
+# ENTRYPOINT ["java", "-jar", "${APP_JAR}"]
+# Ale to juz zadziala:
+# ENTRYPOINT ["java", "-version"]
+# ENTRYPOINT java -jar ${APP_JAR} to mi nie chodzi..., ale to owszem ENTRYPOINT java -jar tutorialpedia-0.0.1-SNAPSHOT.jar
+
+#when splitting "java -jar ${JAR}" it stops working
+
+# This also works (ale nie moge podstawic ${APP_JAR} bo wtedy przestaje
+# ENTRYPOINT ["java" ]
+# CMD  [ "-jar",  "app.jar", "-Dspring.profiles.active=mysql", "-Dlogging.config=${container_log_config}" ]
+
+# when no ENTRYPOINT, you can use CMD to set default command CMD ["executable", "param1"]. This can be overwritten with ron img_name /bin/bash sth else
+

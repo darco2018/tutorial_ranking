@@ -1,0 +1,23 @@
+# https://codefresh.io/docker-tutorial/java_docker_pipeline/
+
+# docker build  -f ./docker/Dockerfile-test-package -t ustrd/tut-test-pack:latest --cache-from ustrd/tut-test-pack:latest .
+# docker run -it --rm -v tutorialpedia-target:/usr/src/app/target  ustrd/tut-test-pack test
+# docker run -it --rm -v tutorialpedia-vol:/usr/src/app/target ustrd/tut-test-pack package (-DskipTests)
+
+# Note: if you are using Maven Surefire plugin and want to have all dependencies for the offline build, make sure to lock down Surefire test provider.
+# reuse any unmodified Docker layer with --cache-from (if pom.xml did not change or you did not decide to upgrade Maven or JDK) :
+# test results are saved into target/surefire-reports
+# 'target' mount path must be absolute. 1st option creates target dir with permissions which make mvn clean impossible
+# DONT USE: docker run -it --rm -v "$PWD"/target:/usr/src/app/target ustrd/mvn-builder mvn  test
+# tutorialpedia-target is a Docker volume
+
+FROM maven:3.6.0-jdk-8-alpine
+RUN apk add bash
+
+WORKDIR /usr/src/app
+COPY ./pom.xml ./pom.xml
+# Alternatives: mvn dependency:resolve” or RUN mvn install && rm -rf target. Unfortunatelly some plugins still want to resolve dependencies at later phases
+RUN mvn dependency:go-offline -B
+COPY ./src ./src
+
+ENTRYPOINT ["mvn"]

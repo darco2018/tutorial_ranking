@@ -1,0 +1,56 @@
+# docker build -t zzz_img -f ./Dockerfile-mvn  .   (--no-cache - will not use intermediate containers)
+# docker run -it --rm  -v "$HOME/.m2":/root/.m2  zzz_img  /bin/sh
+# -v "$HOME/.m2":/root/.m2 - prevents unnecessary downloading
+# -mvn X -e >> debug  -ff > fail fast   -Dmaven.test.skip=true > not compile, not run tests
+
+FROM maven:3.6.0-jdk-8-alpine
+COPY ./.  /app
+WORKDIR /app
+
+# - shell form calls bin/sh -c under the hood:
+# ENTRYPOINT echo "Hello Darek"
+# CMD echo "Hello Tomek"
+# only the first will be executed when both are given.
+# --entrypoint specifies an executable(ls, echo, pwd, etc., eg: --entrypoint ls img_name >> will overwrite it   or >> --entrypoint echo img_name  "Hi"
+# we can use var substitution, as shell will do substitution
+
+# The same as above in exec form ["executable", "param1", "param2"]
+# ENV zmienne nie beda substituted
+ENTRYPOINT ["/bin/echo", "Hello Darek"]
+# CMD ["/bin/echo", "Hello Tomek"]
+# when both are given, output is: Hello Darek /bin/echo Hello Tomek (CMD jest traktowane jako kolejne params)
+# Another example
+ENTRYPOINT ["/bin/ls", "-al"]
+
+# ENTRYPOINT ["mvn", "clean", "compile"]
+# CMD  ["-X"]
+# I can overwrite it running image, eg "run image install'
+
+# ENTRYPOINT SHOULD BE USED WHEN CONTAINER IS USED AS EXECUTABLE the container(maven) is used as executable
+# shell form of
+
+# COPY - generally always use this
+# -v 'pwd'/webapp.jar:/path/in/container/webapp.jar
+# ADD > jak COPY, ale pozwala na app.tar.gz /opt/var/myapp oraz na URL = instead use RUN curl or wget
+
+
+#COPY wait-for-it.sh /usr/bin
+#RUN chmod +x /usr/bin/wait-for-it.sh
+#COPY pom.xml /tmp/
+#COPY src /tmp/src/
+#WORKDIR /tmp/cd ID
+
+# CMD : execute container; can be overriden in docker run ..... bash (eg) ; last CMD overwrites previous, only ONE CMD is possible
+
+# ENTRYPOINT: configures the container executable, the default is /bin/sh -c (can be overridden with --entrypoint from CLI
+# (but no shell will be used then)
+# or in Dockerfile eg ["/myscript.sh"]
+# exec form of ENTRYPOINT doesnt use shell, so ENTRYPOINT ["echo", "$HOME"] will not do var substitution
+
+# CMD : use for default args for entrypoint, or execute ad-hoc commandes in a container
+
+
+
+# VOLUME creates a mount point with the specified point  -v ~/data:/opt/sth/var
+
+# mvn clean package exec:java
