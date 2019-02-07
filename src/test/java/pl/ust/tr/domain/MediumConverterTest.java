@@ -13,6 +13,8 @@ public class MediumConverterTest {
         assertThat(converter.convertToDatabaseColumn(Medium.ARTICLE), is(Medium.ARTICLE.toDbValue()));
     }
 
+
+
     @Test
     public void convertToEntityAttribute() throws Exception {
         assertThat(converter.convertToEntityAttribute(Medium.ARTICLE.toDbValue()), is(Medium.ARTICLE));

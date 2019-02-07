@@ -27,4 +27,9 @@ EXPOSE 8080
 VOLUME /tmp
 
 #when splitting "java -jar ${JAR}" it stops working
+
 ENTRYPOINT ["/bin/bash", "-c", "java -jar -Dspring.profiles.active=${PROFILE} -Dlogging.config=${container_log_config} ${APP_JAR}"]
+
+ENTRYPOINT ["/bin/bash", "-c", "java -jar ${APP_JAR}"]
+CMD  ["-Dspring.profiles.active=mysql", "-Dlogging.config=${container_log_config}"]
+

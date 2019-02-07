@@ -3,9 +3,10 @@
 source ./scripts/docker-config.sh
 
 echo "Starting the database container... Reading MYSQL env variables from file..."
-docker run -d  --name  ${db_container} \
+docker run -d --rm \
+    --name  ${db_container} \
     -p 6604:3306 \
-    --env-file=docker/docker_env \
+    --env-file=docker/config-mysql \
     ${db_image}
 
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Fetching logs from the database container..."

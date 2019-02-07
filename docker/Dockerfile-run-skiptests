@@ -1,0 +1,22 @@
+# docker build -f ./docker/Dockerfile-run-skiptests -t ustrd/tut-run  --cache-from ustrd/tut-run:latest  .
+# cache > download < first time is longer
+# docker run -it --rm -p 8080:8080 ustrd/tut-run
+# OPTIMIZES BUILT TIME (dependencies loaded only when pom changes; instead you can bind mount .m2)
+FROM maven:3.6.0-jdk-8-alpine
+RUN apk add bash
+RUN apk add curl
+
+EXPOSE 8080
+WORKDIR "/usr/src/app"
+
+COPY ./pom.xml ./pom.xml
+RUN  mvn dependency:go-offline -B
+
+COPY ./src ./src
+
+RUN mvn package -DskipTests
+
+# default ENTRYPOINT (/bin/sh -c)
+CMD java -jar docker/*.jar
+
+HEALTHCHECK --interval=1m --timeout=5s CMD curl --fail http://localhost:8080/ || exit 1
